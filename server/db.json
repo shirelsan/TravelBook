@@ -1,0 +1,477 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "name": "Leanne Graham",
+      "username": "Bret",
+      "email": "Sincere@april.biz",
+      "website": "pass1234",
+      "phone": "1-770-736-8031",
+      "address": {
+        "street": "Kulas Light",
+        "city": "Gwenborough",
+        "zipcode": "92998-3874"
+      },
+      "company": {
+        "name": "Romaguera-Crona"
+      }
+    },
+    {
+      "id": "2",
+      "name": "Ervin Howell",
+      "username": "Antonette",
+      "email": "Shanna@melissa.tv",
+      "website": "pass1234",
+      "phone": "010-692-6593",
+      "address": {
+        "street": "Victor Plains",
+        "city": "Wisokyburgh",
+        "zipcode": "90566-7771"
+      },
+      "company": {
+        "name": "Deckow-Crist"
+      }
+    },
+    {
+      "id": "3",
+      "name": "Clementine Bauch",
+      "username": "Samantha",
+      "email": "Nathan@yesenia.net",
+      "website": "pass1234",
+      "phone": "1-463-123-4447",
+      "address": {
+        "street": "Douglas Extension",
+        "city": "McKenziehaven",
+        "zipcode": "59590-4157"
+      },
+      "company": {
+        "name": "Romaguera-Jacobson"
+      }
+    },
+    {
+      "name": "meir dolev",
+      "username": "meir",
+      "email": "meir@gmail.com",
+      "phone": "0501111111",
+      "website": "12345",
+      "address": {
+        "street": "jerusalem",
+        "city": "jerusalem",
+        "zipcode": ""
+      },
+      "company": {
+        "name": ""
+      },
+      "id": "lf1H09F7Q-c"
+    }
+  ],
+  "todos": [
+    {
+      "id": "1",
+      "userId": 1,
+      "title": "Book flight to Paris",
+      "completed": true
+    },
+    {
+      "id": "2",
+      "userId": 1,
+      "title": "Reserve hotel in Rome",
+      "completed": false
+    },
+    {
+      "id": "3",
+      "userId": 1,
+      "title": "Pack summer clothes",
+      "completed": false
+    },
+    {
+      "id": "4",
+      "userId": 1,
+      "title": "Get travel insurance",
+      "completed": true
+    },
+    {
+      "id": "5",
+      "userId": 1,
+      "title": "Exchange currency",
+      "completed": false
+    },
+    {
+      "id": "6",
+      "userId": 1,
+      "title": "Download offline maps",
+      "completed": true
+    },
+    {
+      "id": "7",
+      "userId": 1,
+      "title": "Book museum tickets",
+      "completed": false
+    },
+    {
+      "id": "8",
+      "userId": 1,
+      "title": "Charge camera battery",
+      "completed": false
+    },
+    {
+      "id": "9",
+      "userId": 2,
+      "title": "Book flight to Tokyo",
+      "completed": true
+    },
+    {
+      "id": "10",
+      "userId": 2,
+      "title": "Learn basic Japanese phrases",
+      "completed": false
+    },
+    {
+      "id": "11",
+      "userId": 2,
+      "title": "Get JR Pass",
+      "completed": true
+    },
+    {
+      "id": "12",
+      "userId": 3,
+      "title": "Book Airbnb in Barcelona",
+      "completed": false
+    },
+    {
+      "id": "13",
+      "userId": 3,
+      "title": "Plan route through Spain",
+      "completed": true
+    }
+  ],
+  "posts": [
+    {
+      "id": "1",
+      "userId": 1,
+      "title": "Day 1 in Paris – Arrival and First Impressions",
+      "body": "We arrived at Charles de Gaulle airport after a long flight. The city is absolutely stunning. Checked into our cozy hotel near the Marais district. Walked along the Seine and had our first croissant – magnifique!"
+    },
+    {
+      "id": "2",
+      "userId": 1,
+      "title": "Day 2 – The Eiffel Tower Experience",
+      "body": "Woke up early to beat the crowds at the Eiffel Tower. The view from the top is breathtaking. Had lunch at a small bistro nearby. In the evening we took a river cruise along the Seine."
+    },
+    {
+      "id": "3",
+      "userId": 1,
+      "title": "Day 3 – Louvre Museum Marathon",
+      "body": "Spent the entire day at the Louvre. You could spend a week here and not see everything. The Mona Lisa was smaller than expected but the rest of the collection is extraordinary."
+    },
+    {
+      "id": "4",
+      "userId": 1,
+      "title": "Rome Day 1 – Eternal City Awaits",
+      "body": "Arrived in Rome by train from Paris. The Colosseum at sunset is something I will never forget. Had the best carbonara of my life at a tiny restaurant near Trastevere."
+    },
+    {
+      "id": "5",
+      "userId": 1,
+      "title": "Rome Day 2 – Vatican and Sistine Chapel",
+      "body": "Visited the Vatican Museums and the Sistine Chapel. Michelangelo's ceiling is absolutely breathtaking. Tossed a coin in the Trevi Fountain – we're definitely coming back!"
+    },
+    {
+      "id": "6",
+      "userId": 2,
+      "title": "Tokyo Day 1 – Shibuya Chaos",
+      "body": "Landed in Narita and took the Narita Express to the city. Shibuya crossing at rush hour is organized chaos. Tried ramen for the first time – absolutely incredible."
+    },
+    {
+      "id": "7",
+      "userId": 2,
+      "title": "Tokyo Day 2 – Temples and Shrines",
+      "body": "Visited Senso-ji temple in Asakusa in the morning. The contrast between ancient temples and modern skyscrapers is fascinating. Had matcha everything today."
+    },
+    {
+      "id": "8",
+      "userId": 3,
+      "title": "Barcelona Day 1 – Gaudi Magic",
+      "body": "Sagrada Familia is unlike anything I have ever seen. Gaudi's architecture is otherworldly. The Barceloneta beach in the evening was perfect."
+    },
+    {
+      "userId": "lf1H09F7Q-c",
+      "title": "יום מספר 1: נוחתים בפריז",
+      "body": "הגענו למלון, פרקנו מזוודות וישר יצאנו להסתובב. עברנו בין פטיסריז מדהימים ועד לחנויות בוטיק לעיצוב הבית. אספתי המון רעיונות חדשים לסידור הדירה וקניתי חומרי גלם מעולים.\"",
+      "id": "BagWi-zwqP0"
+    }
+  ],
+  "comments": [
+    {
+      "id": "1",
+      "postId": 1,
+      "name": "Ervin Howell",
+      "email": "Antonette@user.com",
+      "body": "Paris is magical! Did you visit Montmartre?"
+    },
+    {
+      "id": "2",
+      "postId": 1,
+      "name": "Clementine Bauch",
+      "email": "Nathan@user.com",
+      "body": "Sounds amazing! I am so jealous!"
+    },
+    {
+      "id": "3",
+      "postId": 2,
+      "name": "Ervin Howell",
+      "email": "Antonette@user.com",
+      "body": "The night view of the tower is even better!"
+    },
+    {
+      "id": "4",
+      "postId": 3,
+      "name": "Clementine Bauch",
+      "email": "Nathan@user.com",
+      "body": "The Venus de Milo is my favorite piece there."
+    },
+    {
+      "id": "5",
+      "postId": 4,
+      "name": "Leanne Graham",
+      "email": "Sincere@user.com",
+      "body": "Rome in one day? You need at least a week!"
+    },
+    {
+      "id": "6",
+      "postId": 5,
+      "name": "Ervin Howell",
+      "email": "Antonette@user.com",
+      "body": "The Vatican is on my bucket list!"
+    },
+    {
+      "id": "7",
+      "postId": 6,
+      "name": "Leanne Graham",
+      "email": "Sincere@user.com",
+      "body": "Tokyo ramen is life-changing!"
+    },
+    {
+      "id": "8",
+      "postId": 8,
+      "name": "Leanne Graham",
+      "email": "Sincere@user.com",
+      "body": "Park Guell is worth a visit too!"
+    }
+  ],
+  "albums": [
+    {
+      "id": "1",
+      "userId": 1,
+      "title": "Paris 2024 – City of Lights"
+    },
+    {
+      "id": "2",
+      "userId": 1,
+      "title": "Rome 2024 – Eternal City"
+    },
+    {
+      "id": "3",
+      "userId": 1,
+      "title": "Santorini Summer 2023"
+    },
+    {
+      "id": "4",
+      "userId": 2,
+      "title": "Tokyo 2024 – Neon and Zen"
+    },
+    {
+      "id": "5",
+      "userId": 2,
+      "title": "Kyoto 2024 – Ancient Japan"
+    },
+    {
+      "id": "6",
+      "userId": 3,
+      "title": "Barcelona 2024 – Gaudi Dream"
+    },
+    {
+      "userId": "lf1H09F7Q-c",
+      "title": "Paris - 2026",
+      "id": "hm0s0ANhVKw"
+    }
+  ],
+  "photos": [
+    {
+      "id": "1",
+      "albumId": 1,
+      "title": "Eiffel Tower at Sunset",
+      "url": "https://picsum.photos/seed/paris1/600/400",
+      "thumbnailUrl": "https://picsum.photos/seed/paris1/150/150"
+    },
+    {
+      "id": "2",
+      "albumId": 1,
+      "title": "Seine River Walk",
+      "url": "https://picsum.photos/seed/paris2/600/400",
+      "thumbnailUrl": "https://picsum.photos/seed/paris2/150/150"
+    },
+    {
+      "id": "3",
+      "albumId": 1,
+      "title": "Louvre Museum",
+      "url": "https://picsum.photos/seed/paris3/600/400",
+      "thumbnailUrl": "https://picsum.photos/seed/paris3/150/150"
+    },
+    {
+      "id": "4",
+      "albumId": 1,
+      "title": "Notre Dame Cathedral",
+      "url": "https://picsum.photos/seed/paris4/600/400",
+      "thumbnailUrl": "https://picsum.photos/seed/paris4/150/150"
+    },
+    {
+      "id": "5",
+      "albumId": 1,
+      "title": "Montmartre Street",
+      "url": "https://picsum.photos/seed/paris5/600/400",
+      "thumbnailUrl": "https://picsum.photos/seed/paris5/150/150"
+    },
+    {
+      "id": "6",
+      "albumId": 1,
+      "title": "Champs Elysees",
+      "url": "https://picsum.photos/seed/paris6/600/400",
+      "thumbnailUrl": "https://picsum.photos/seed/paris6/150/150"
+    },
+    {
+      "id": "7",
+      "albumId": 2,
+      "title": "Colosseum at Dusk",
+      "url": "https://picsum.photos/seed/rome1/600/400",
+      "thumbnailUrl": "https://picsum.photos/seed/rome1/150/150"
+    },
+    {
+      "id": "8",
+      "albumId": 2,
+      "title": "Trevi Fountain",
+      "url": "https://picsum.photos/seed/rome2/600/400",
+      "thumbnailUrl": "https://picsum.photos/seed/rome2/150/150"
+    },
+    {
+      "id": "9",
+      "albumId": 2,
+      "title": "Vatican Square",
+      "url": "https://picsum.photos/seed/rome3/600/400",
+      "thumbnailUrl": "https://picsum.photos/seed/rome3/150/150"
+    },
+    {
+      "id": "10",
+      "albumId": 2,
+      "title": "Roman Forum",
+      "url": "https://picsum.photos/seed/rome4/600/400",
+      "thumbnailUrl": "https://picsum.photos/seed/rome4/150/150"
+    },
+    {
+      "id": "11",
+      "albumId": 2,
+      "title": "Trastevere Alley",
+      "url": "https://picsum.photos/seed/rome5/600/400",
+      "thumbnailUrl": "https://picsum.photos/seed/rome5/150/150"
+    },
+    {
+      "id": "12",
+      "albumId": 3,
+      "title": "Santorini Blue Domes",
+      "url": "https://picsum.photos/seed/santorini1/600/400",
+      "thumbnailUrl": "https://picsum.photos/seed/santorini1/150/150"
+    },
+    {
+      "id": "13",
+      "albumId": 3,
+      "title": "Oia Sunset",
+      "url": "https://picsum.photos/seed/santorini2/600/400",
+      "thumbnailUrl": "https://picsum.photos/seed/santorini2/150/150"
+    },
+    {
+      "id": "14",
+      "albumId": 3,
+      "title": "Caldera View",
+      "url": "https://picsum.photos/seed/santorini3/600/400",
+      "thumbnailUrl": "https://picsum.photos/seed/santorini3/150/150"
+    },
+    {
+      "id": "15",
+      "albumId": 4,
+      "title": "Shibuya Crossing Night",
+      "url": "https://picsum.photos/seed/tokyo1/600/400",
+      "thumbnailUrl": "https://picsum.photos/seed/tokyo1/150/150"
+    },
+    {
+      "id": "16",
+      "albumId": 4,
+      "title": "Senso-ji Temple",
+      "url": "https://picsum.photos/seed/tokyo2/600/400",
+      "thumbnailUrl": "https://picsum.photos/seed/tokyo2/150/150"
+    },
+    {
+      "id": "17",
+      "albumId": 4,
+      "title": "Tokyo Skyline from Tower",
+      "url": "https://picsum.photos/seed/tokyo3/600/400",
+      "thumbnailUrl": "https://picsum.photos/seed/tokyo3/150/150"
+    },
+    {
+      "id": "18",
+      "albumId": 4,
+      "title": "Shinjuku Street Food",
+      "url": "https://picsum.photos/seed/tokyo4/600/400",
+      "thumbnailUrl": "https://picsum.photos/seed/tokyo4/150/150"
+    },
+    {
+      "id": "19",
+      "albumId": 5,
+      "title": "Fushimi Inari Gates",
+      "url": "https://picsum.photos/seed/kyoto1/600/400",
+      "thumbnailUrl": "https://picsum.photos/seed/kyoto1/150/150"
+    },
+    {
+      "id": "20",
+      "albumId": 5,
+      "title": "Arashiyama Bamboo Grove",
+      "url": "https://picsum.photos/seed/kyoto2/600/400",
+      "thumbnailUrl": "https://picsum.photos/seed/kyoto2/150/150"
+    },
+    {
+      "id": "21",
+      "albumId": 5,
+      "title": "Geisha District Gion",
+      "url": "https://picsum.photos/seed/kyoto3/600/400",
+      "thumbnailUrl": "https://picsum.photos/seed/kyoto3/150/150"
+    },
+    {
+      "id": "22",
+      "albumId": 6,
+      "title": "Sagrada Familia",
+      "url": "https://picsum.photos/seed/barcelona1/600/400",
+      "thumbnailUrl": "https://picsum.photos/seed/barcelona1/150/150"
+    },
+    {
+      "id": "23",
+      "albumId": 6,
+      "title": "Park Guell Mosaic",
+      "url": "https://picsum.photos/seed/barcelona2/600/400",
+      "thumbnailUrl": "https://picsum.photos/seed/barcelona2/150/150"
+    },
+    {
+      "id": "24",
+      "albumId": 6,
+      "title": "Barceloneta Beach",
+      "url": "https://picsum.photos/seed/barcelona3/600/400",
+      "thumbnailUrl": "https://picsum.photos/seed/barcelona3/150/150"
+    },
+    {
+      "id": "25",
+      "albumId": 6,
+      "title": "Las Ramblas",
+      "url": "https://picsum.photos/seed/barcelona4/600/400",
+      "thumbnailUrl": "https://picsum.photos/seed/barcelona4/150/150"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}

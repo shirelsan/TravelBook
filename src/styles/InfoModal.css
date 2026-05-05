@@ -1,0 +1,50 @@
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-card {
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  width: 100%;
+  max-width: 440px;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #9e9080;
+}
+
+.modal-card h2 {
+  font-family: 'Playfair Display', serif;
+  color: #0d4d66;
+  margin-bottom: 24px;
+  font-size: 1.5rem;
+}
+
+.info-grid { display: flex; flex-direction: column; gap: 14px; }
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #ede8e0;
+  font-size: 14px;
+}
+.info-row span { color: #9e9080; }
+.info-row strong { color: #1a6b8a; }
