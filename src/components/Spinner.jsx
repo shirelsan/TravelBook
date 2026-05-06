@@ -1,4 +1,4 @@
-import './Spinner.css';
+import '../styles/Spinner.css';
  
 export default function Spinner({ text = 'Loading...' }) {
   return (

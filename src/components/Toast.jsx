@@ -1,5 +1,5 @@
-import { useState, useEffect, createContext, useContext, useCallback } from 'react';
-import './Toast.css';
+import { useState, useCallback, createContext, useContext } from 'react';
+import '../styles/Toast.css';
  
 const ToastContext = createContext(null);
  

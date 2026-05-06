@@ -1,4 +1,4 @@
-import './ConfirmDialog.css';
+import '../styles/ConfirmDialog.css';
  
 export default function ConfirmDialog({ message, onConfirm, onCancel }) {
   return (

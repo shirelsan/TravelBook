@@ -25,44 +25,53 @@ export default function Todos() {
   const [searchCompleted, setSearchCompleted] = useState('all');
   const [confirmDelete, setConfirmDelete] = useState(null);
  
-  useEffect(() => { fetchTodos(); }, [user]);
+  useEffect(() => { fetchTodos(); }, []);
  
   const fetchTodos = async () => {
     setLoading(true);
     try {
       const data = await getTodosByUser(user.id);
       setTodos(data);
+    } catch {
+      toast('Failed to load tasks', 'error');
     } finally {
       setLoading(false);
     }
   };
  
-  const handleAdd = async (e) => {
-    e.preventDefault();
+  const handleAdd = async () => {
     if (!newTitle.trim()) return;
-    const added = await createTodo({ userId: user.id, title: newTitle.trim(), completed: false });
-    setTodos([...todos, added]);
-    setNewTitle('');
-    toast('Task added successfully');
+    try {
+      const added = await createTodo({ userId: user.id, title: newTitle.trim(), completed: false });
+      setTodos((prev) => [...prev, added]);
+      setNewTitle('');
+      toast('Task added successfully');
+    } catch {
+      toast('Failed to add task', 'error');
+    }
+  };
+ 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') handleAdd();
   };
  
   const handleDelete = async (id) => {
     await deleteTodo(id);
-    setTodos(todos.filter((t) => t.id !== id));
+    setTodos((prev) => prev.filter((t) => t.id !== id));
     setConfirmDelete(null);
     toast('Task deleted', 'error');
   };
  
   const handleToggle = async (todo) => {
     const updated = await updateTodo(todo.id, { ...todo, completed: !todo.completed });
-    setTodos(todos.map((t) => (t.id === todo.id ? updated : t)));
+    setTodos((prev) => prev.map((t) => (t.id === todo.id ? updated : t)));
     toast(updated.completed ? 'Marked as done!' : 'Marked as pending');
   };
  
   const handleEditSave = async (todo) => {
     if (!editTitle.trim()) return;
     const updated = await updateTodo(todo.id, { ...todo, title: editTitle.trim() });
-    setTodos(todos.map((t) => (t.id === todo.id ? updated : t)));
+    setTodos((prev) => prev.map((t) => (t.id === todo.id ? updated : t)));
     setEditId(null);
     setEditTitle('');
     toast('Task updated');
@@ -90,14 +99,29 @@ export default function Todos() {
         <h2>☑️ My Travel Tasks</h2>
       </div>
  
-      <form className="todo-add-form" onSubmit={handleAdd}>
-        <input value={newTitle} onChange={(e) => setNewTitle(e.target.value)} placeholder="Add a new task..." />
-        <button type="submit">+ Add</button>
-      </form>
+      <div className="todo-add-form">
+        <input
+          value={newTitle}
+          onChange={(e) => setNewTitle(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder="Add a new task and press Enter or click Add..."
+        />
+        <button onClick={handleAdd}>+ Add</button>
+      </div>
  
       <div className="todo-filters">
-        <input placeholder="Search by ID" value={searchId} onChange={(e) => setSearchId(e.target.value)} type="number" min="1" />
-        <input placeholder="Search by title" value={searchTitle} onChange={(e) => setSearchTitle(e.target.value)} />
+        <input
+          placeholder="Search by ID"
+          value={searchId}
+          onChange={(e) => setSearchId(e.target.value)}
+          type="number"
+          min="1"
+        />
+        <input
+          placeholder="Search by title"
+          value={searchTitle}
+          onChange={(e) => setSearchTitle(e.target.value)}
+        />
         <select value={searchCompleted} onChange={(e) => setSearchCompleted(e.target.value)}>
           <option value="all">All</option>
           <option value="done">Completed</option>
@@ -122,17 +146,26 @@ export default function Todos() {
           {filtered.map((todo) => (
             <li key={todo.id} className={`todo-item ${todo.completed ? 'done' : ''}`}>
               <span className="todo-id">#{todo.id}</span>
-              <input type="checkbox" checked={todo.completed} onChange={() => handleToggle(todo)} />
+              <input
+                type="checkbox"
+                checked={todo.completed}
+                onChange={() => handleToggle(todo)}
+              />
               {editId === todo.id ? (
                 <div className="todo-edit-row">
-                  <input value={editTitle} onChange={(e) => setEditTitle(e.target.value)} autoFocus />
+                  <input
+                    value={editTitle}
+                    onChange={(e) => setEditTitle(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleEditSave(todo)}
+                    autoFocus
+                  />
                   <button onClick={() => handleEditSave(todo)}>Save</button>
                   <button onClick={() => setEditId(null)}>Cancel</button>
                 </div>
               ) : (
                 <span className="todo-title">{todo.title}</span>
               )}
-              {todo.completed && <span className="todo-badge">Done</span>}
+              {todo.completed && <span className="todo-badge">Done ✓</span>}
               <div className="todo-actions">
                 <button onClick={() => { setEditId(todo.id); setEditTitle(todo.title); }}>✏️</button>
                 <button onClick={() => setConfirmDelete(todo.id)}>🗑️</button>

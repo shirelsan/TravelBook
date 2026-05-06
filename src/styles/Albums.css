@@ -1,52 +1,80 @@
 .albums-page h2, .photos-page h2 { font-size: 1.8rem; color: #0d4d66; margin-bottom: 24px; }
-
+ 
 .albums-toolbar {
   display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; align-items: center;
 }
 .albums-toolbar input { width: 150px; }
-
+ 
 .album-add-form {
   background: white; border-radius: 12px; padding: 16px;
   margin-bottom: 24px; display: flex; gap: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 .album-add-form input { flex: 1; }
-
+ 
+/* Album grid – square cards with cover image */
 .albums-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
 }
-
+ 
 .album-card {
   background: white;
-  border-radius: 12px;
-  padding: 16px;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.09);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+.album-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
+ 
+.album-cover {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+  background: #e8e0d5;
+}
+ 
+.album-cover-placeholder {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: linear-gradient(135deg, #c8d8e0 0%, #dce8c8 100%);
   display: flex;
   align-items: center;
-  gap: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-  transition: transform 0.2s;
+  justify-content: center;
+  font-size: 48px;
 }
-.album-card:hover { transform: translateY(-2px); }
-
-.album-thumb { font-size: 32px; }
-.album-info { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+ 
+.album-info {
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+}
 .album-id { font-size: 11px; color: #9e9080; }
 .album-title {
-  font-size: 14px; font-weight: 500; color: #1a6b8a; cursor: pointer;
-  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  color: #0d4d66;
+  line-height: 1.3;
 }
-.album-title:hover { text-decoration: underline; }
-
+ 
+.album-footer {
+  padding: 8px 14px 12px;
+  display: flex;
+  justify-content: flex-end;
+}
 .album-delete {
-  background: none; border: none; cursor: pointer; font-size: 16px;
-  padding: 4px; border-radius: 6px; transition: background 0.2s;
+  background: none; border: none; cursor: pointer; font-size: 15px;
+  padding: 4px 6px; border-radius: 6px; transition: background 0.2s; color: #9e9080;
 }
-.album-delete:hover { background: #fde8e6; }
-
+.album-delete:hover { background: #fde8e6; color: #c0392b; }
+ 
 /* Photos */
-.photos-page {}
-
 .photos-header {
   display: flex; align-items: center; gap: 16px; margin-bottom: 24px; flex-wrap: wrap;
 }
@@ -57,21 +85,21 @@
   font-family: 'DM Sans', sans-serif; font-size: 13px; transition: all 0.2s;
 }
 .btn-back:hover { background: #1a6b8a; color: white; }
-
+ 
 .photo-add-form {
   background: white; border-radius: 12px; padding: 16px;
   margin-bottom: 24px; display: flex; gap: 10px; flex-wrap: wrap;
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 .photo-add-form input { flex: 1; min-width: 160px; }
-
+ 
 .photos-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: 16px;
   margin-bottom: 24px;
 }
-
+ 
 .photo-card {
   background: white; border-radius: 12px; overflow: hidden;
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
@@ -80,9 +108,9 @@
   width: 100%; height: 140px; object-fit: cover; cursor: pointer; display: block;
 }
 .photo-card img:hover { opacity: 0.9; }
-
+ 
 .photo-title { font-size: 12px; color: #4a3f35; padding: 8px 10px 4px; line-height: 1.3; }
-
+ 
 .photo-edit { display: flex; gap: 6px; padding: 6px 10px; flex-wrap: wrap; }
 .photo-edit input { flex: 1; font-size: 12px; padding: 4px 8px; }
 .photo-edit button {
@@ -90,7 +118,7 @@
 }
 .photo-edit button:first-of-type { background: #1a6b8a; color: white; }
 .photo-edit button:last-of-type { background: #ede8e0; }
-
+ 
 .photo-actions {
   display: flex; gap: 6px; padding: 4px 8px 10px;
 }
@@ -99,9 +127,9 @@
   padding: 3px 6px; border-radius: 6px;
 }
 .photo-actions button:hover { background: #f5ede0; }
-
+ 
 .load-more { text-align: center; margin: 16px 0; }
-
+ 
 /* Lightbox */
 .lightbox-overlay {
   position: fixed; inset: 0; background: rgba(0,0,0,0.85);
@@ -119,3 +147,4 @@
   border-radius: 50%; width: 32px; height: 32px;
   cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center;
 }
+ 
