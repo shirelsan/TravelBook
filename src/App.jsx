@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { ToastProvider } from './components/Toast';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -19,8 +19,10 @@ export default function App() {
           <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          
+          {/* הניתוב שונה כדי לכלול את מזהה המשתמש לפי הדרישות */}
           <Route
-            path="/home"
+            path="/users/:userId"
             element={
               <ProtectedRoute>
                 <Home />
@@ -32,6 +34,7 @@ export default function App() {
             <Route path="posts" element={<Posts />} />
             <Route path="albums/*" element={<Albums />} />
           </Route>
+          
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       </BrowserRouter>
@@ -42,23 +45,25 @@ export default function App() {
  
 function WelcomeDashboard() {
   const navigate = useNavigate();
+  const { userId } = useParams(); // מושכים את ה-ID מה-URL
+  
   return (
     <div className="welcome-dashboard">
       <div className="welcome-icon">✈️</div>
       <h2>Welcome to TravelBook</h2>
       <p>Your personal travel journal. Choose a section from the sidebar to get started.</p>
       <div className="welcome-cards">
-        <div className="welcome-card" onClick={() => navigate('/home/todos')}>
+        <div className="welcome-card" onClick={() => navigate(`/users/${userId}/todos`)}>
           <span>☑️</span>
           <strong>Todos</strong>
           <p>Manage your travel tasks</p>
         </div>
-        <div className="welcome-card" onClick={() => navigate('/home/posts')}>
+        <div className="welcome-card" onClick={() => navigate(`/users/${userId}/posts`)}>
           <span>📝</span>
           <strong>Posts</strong>
           <p>Write your travel journal</p>
         </div>
-        <div className="welcome-card" onClick={() => navigate('/home/albums')}>
+        <div className="welcome-card" onClick={() => navigate(`/users/${userId}/albums`)}>
           <span>📷</span>
           <strong>Albums</strong>
           <p>Browse your travel photos</p>
@@ -67,4 +72,3 @@ function WelcomeDashboard() {
     </div>
   );
 }
- 

@@ -23,7 +23,7 @@ export default function Login() {
       );
       if (found) {
         login(found);
-        navigate('/home');
+        navigate(`/users/${found.id}`);
       } else {
         setError('Invalid username or password. Please try again.');
       }

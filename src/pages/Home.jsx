@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigate, Outlet, NavLink } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, Outlet, NavLink, useParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import InfoModal from '../components/InfoModal';
 import '../styles/Home.css';
@@ -7,12 +7,24 @@ import '../styles/Home.css';
 export default function Home() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const { userId } = useParams(); // קריאת ה-ID של המשתמש מהכתובת
   const [showInfo, setShowInfo] = useState(false);
+
+  // אבטחה: מניעת גישה למידע של משתמש אחר
+  useEffect(() => {
+    if (user && userId && String(user.id) !== userId) {
+      // אם יש ניסיון לגשת למשתמש אחר, זורקים אותו חזרה לעמוד שלו
+      navigate(`/users/${user.id}`, { replace: true });
+    }
+  }, [user, userId, navigate]);
 
   const handleLogout = () => {
     logout();
     navigate('/login');
   };
+
+  // אם ה-ID עדיין לא תואם (לפני הרינדור מחדש של ה-useEffect), אל תציג כלום כדי לא להדליף מידע
+  if (String(user.id) !== userId) return null;
 
   return (
     <div className="home-layout">
@@ -29,13 +41,13 @@ export default function Home() {
           <button className="nav-btn info-btn" onClick={() => setShowInfo(true)}>
             <span>👤</span> Info
           </button>
-          <NavLink to={`/home/todos`} className={({ isActive }) => `nav-btn ${isActive ? 'active' : ''}`}>
+          <NavLink to={`/users/${user.id}/todos`} className={({ isActive }) => `nav-btn ${isActive ? 'active' : ''}`}>
             <span>☑️</span> Todos
           </NavLink>
-          <NavLink to={`/home/posts`} className={({ isActive }) => `nav-btn ${isActive ? 'active' : ''}`}>
+          <NavLink to={`/users/${user.id}/posts`} className={({ isActive }) => `nav-btn ${isActive ? 'active' : ''}`}>
             <span>📝</span> Posts
           </NavLink>
-          <NavLink to={`/home/albums`} className={({ isActive }) => `nav-btn ${isActive ? 'active' : ''}`}>
+          <NavLink to={`/users/${user.id}/albums`} className={({ isActive }) => `nav-btn ${isActive ? 'active' : ''}`}>
             <span>📷</span> Albums
           </NavLink>
         </nav>

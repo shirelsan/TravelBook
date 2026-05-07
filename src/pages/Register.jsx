@@ -61,7 +61,7 @@ export default function Register() {
       };
       const created = await createUser(newUser);
       login(created);
-      navigate('/home');
+      navigate(`/users/${created.id}`);
     } catch {
       setError('Failed to register. Please try again.');
     } finally {
