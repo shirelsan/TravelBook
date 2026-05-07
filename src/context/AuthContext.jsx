@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState } from 'react';
 
 const AuthContext = createContext(null);
 
@@ -18,8 +18,13 @@ export function AuthProvider({ children }) {
     setUser(null);
   };
 
+  const updateUserData = (updatedData) => {
+    localStorage.setItem('travelbook_user', JSON.stringify(updatedData));
+    setUser(updatedData);
+  };
+
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, updateUserData }}>
       {children}
     </AuthContext.Provider>
   );
