@@ -53,7 +53,10 @@ export const getTodosByUser = async (userId) => {
 export const createTodo = async (data) => {
   const normalizedData = { ...data, userId: String(data.userId) }; 
   const newTodo = await apiFetch('/todos', { method: 'POST', body: JSON.stringify(normalizedData) });
-  if (cache.todos[data.userId]) cache.todos[data.userId].push(newTodo);
+  
+  if (cache.todos[data.userId]) {
+    cache.todos[data.userId] = [...cache.todos[data.userId], newTodo];
+  }
   return newTodo;
 };
 
@@ -162,7 +165,6 @@ export const deleteAlbum = async (id, userId) => {
 
 
 // --- PHOTOS ---
-// תמונות מובאות בשלבים (Pagination), לכן ה-Cache פה פחות מתאים.
 export const getPhotosByAlbum = (albumId, page = 1, limit = 6) =>
   apiFetch(`/photos?albumId=${albumId}&_page=${page}&_limit=${limit}`);
 

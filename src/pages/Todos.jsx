@@ -4,16 +4,14 @@ import { useAuth } from '../context/AuthContext';
 import { useToast } from '../components/Toast';
 import ConfirmDialog from '../components/ConfirmDialog';
 import Spinner from '../components/Spinner';
-import {
-  getTodosByUser, createTodo, updateTodo, deleteTodo
-} from '../services/api';
+import { getTodosByUser, createTodo, updateTodo, deleteTodo } from '../services/api';
 import '../styles/Todos.css';
- 
+
 export default function Todos() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const toast = useToast();
- 
+
   const [todos, setTodos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [newTitle, setNewTitle] = useState('');
@@ -24,9 +22,12 @@ export default function Todos() {
   const [searchTitle, setSearchTitle] = useState('');
   const [searchCompleted, setSearchCompleted] = useState('all');
   const [confirmDelete, setConfirmDelete] = useState(null);
- 
-  useEffect(() => { fetchTodos(); }, []);
- 
+  
+  // State עבור העיצוב החדש של כרטיסיית ההוספה
+  const [isAdding, setIsAdding] = useState(false);
+
+  useEffect(() => { fetchTodos(); }, [user]);
+
   const fetchTodos = async () => {
     setLoading(true);
     try {
@@ -38,36 +39,38 @@ export default function Todos() {
       setLoading(false);
     }
   };
- 
+
   const handleAdd = async () => {
     if (!newTitle.trim()) return;
     try {
       const added = await createTodo({ userId: user.id, title: newTitle.trim(), completed: false });
       setTodos((prev) => [...prev, added]);
       setNewTitle('');
-      toast('Task added successfully');
+      setIsAdding(false);
+      toast('Task added to your journey!');
     } catch {
       toast('Failed to add task', 'error');
     }
   };
- 
+
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') handleAdd();
   };
- 
+
   const handleDelete = async (id) => {
-    await deleteTodo(id);
+    // שלחנו גם את מזהה המשתמש כדי שהקאש יתנקה נכון ב-api.js
+    await deleteTodo(id, user.id);
     setTodos((prev) => prev.filter((t) => t.id !== id));
     setConfirmDelete(null);
     toast('Task deleted', 'error');
   };
- 
+
   const handleToggle = async (todo) => {
     const updated = await updateTodo(todo.id, { ...todo, completed: !todo.completed });
     setTodos((prev) => prev.map((t) => (t.id === todo.id ? updated : t)));
     toast(updated.completed ? 'Marked as done!' : 'Marked as pending');
   };
- 
+
   const handleEditSave = async (todo) => {
     if (!editTitle.trim()) return;
     const updated = await updateTodo(todo.id, { ...todo, title: editTitle.trim() });
@@ -76,7 +79,7 @@ export default function Todos() {
     setEditTitle('');
     toast('Task updated');
   };
- 
+
   const filtered = todos
     .filter((t) => {
       if (searchId && String(t.id) !== searchId) return false;
@@ -86,36 +89,27 @@ export default function Todos() {
       return true;
     })
     .sort((a, b) => {
-      if (sortBy === 'id') return a.id - b.id;
+      // התיקון הקריטי: שימוש ב-localeCompare מונע שגיאות NaN של מחרוזות מול מספרים!
+      if (sortBy === 'id') return String(a.id).localeCompare(String(b.id));
       if (sortBy === 'title') return a.title.localeCompare(b.title);
       if (sortBy === 'completed') return Number(b.completed) - Number(a.completed);
       return 0;
     });
- 
+
   return (
     <div className="todos-page">
       <div className="page-header">
-        <button className="btn-home" onClick={() => navigate('/home')}>🏠 Home</button>
+        {/* הניווט תוקן לכלול את מזהה המשתמש לפי הדרישות */}
+        <button className="btn-home" onClick={() => navigate(`/users/${user.id}`)}>🏠 Home</button>
         <h2>☑️ My Travel Tasks</h2>
       </div>
- 
-      <div className="todo-add-form">
-        <input
-          value={newTitle}
-          onChange={(e) => setNewTitle(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="Add a new task and press Enter or click Add..."
-        />
-        <button onClick={handleAdd}>+ Add</button>
-      </div>
- 
+
       <div className="todo-filters">
         <input
           placeholder="Search by ID"
           value={searchId}
           onChange={(e) => setSearchId(e.target.value)}
-          type="number"
-          min="1"
+          type="text"
         />
         <input
           placeholder="Search by title"
@@ -133,48 +127,72 @@ export default function Todos() {
           <option value="completed">Sort by Status</option>
         </select>
       </div>
- 
+
       {loading ? (
         <Spinner text="Loading your tasks..." />
-      ) : filtered.length === 0 ? (
-        <div className="empty-state">
-          <span>📋</span>
-          <p>{todos.length === 0 ? 'No tasks yet. Add your first travel task above!' : 'No tasks match your search.'}</p>
-        </div>
       ) : (
         <ul className="todo-list">
-          {filtered.map((todo) => (
-            <li key={todo.id} className={`todo-item ${todo.completed ? 'done' : ''}`}>
-              <span className="todo-id">#{todo.id}</span>
-              <input
-                type="checkbox"
-                checked={todo.completed}
-                onChange={() => handleToggle(todo)}
-              />
-              {editId === todo.id ? (
-                <div className="todo-edit-row">
-                  <input
-                    value={editTitle}
-                    onChange={(e) => setEditTitle(e.target.value)}
-                    onKeyDown={(e) => e.key === 'Enter' && handleEditSave(todo)}
-                    autoFocus
-                  />
-                  <button onClick={() => handleEditSave(todo)}>Save</button>
-                  <button onClick={() => setEditId(null)}>Cancel</button>
-                </div>
-              ) : (
-                <span className="todo-title">{todo.title}</span>
-              )}
-              {todo.completed && <span className="todo-badge">Done ✓</span>}
-              <div className="todo-actions">
-                <button onClick={() => { setEditId(todo.id); setEditTitle(todo.title); }}>✏️</button>
-                <button onClick={() => setConfirmDelete(todo.id)}>🗑️</button>
+          
+          {/* עיצוב חדש ואינטואיטיבי להוספת משימה (Inline Add) */}
+          <li className="todo-item" style={{ cursor: 'pointer', border: isAdding ? '1px solid #1a6b8a' : '1px dashed #9e9080' }} onClick={() => !isAdding && setIsAdding(true)}>
+            {isAdding ? (
+              <div className="todo-edit-row" onClick={(e) => e.stopPropagation()}>
+                <input
+                  value={newTitle}
+                  onChange={(e) => setNewTitle(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder="e.g., Book flight to Paris..."
+                  autoFocus
+                />
+                <button className="btn-primary" onClick={handleAdd}>Add Task</button>
+                <button className="btn-secondary" onClick={() => setIsAdding(false)}>Cancel</button>
               </div>
-            </li>
-          ))}
+            ) : (
+              <div style={{ color: '#1a6b8a', fontWeight: '500', display: 'flex', gap: '8px', alignItems: 'center' }}>
+                <span style={{ fontSize: '18px' }}>➕</span> Add a new travel task...
+              </div>
+            )}
+          </li>
+
+          {filtered.length === 0 && !isAdding ? (
+            <div className="empty-state">
+              <span>📋</span>
+              <p>{todos.length === 0 ? 'No tasks yet. Start planning!' : 'No tasks match your search.'}</p>
+            </div>
+          ) : (
+            filtered.map((todo) => (
+              <li key={todo.id} className={`todo-item ${todo.completed ? 'done' : ''}`}>
+                <span className="todo-id">#{String(todo.id).substring(0, 4)}</span>
+                <input
+                  type="checkbox"
+                  checked={todo.completed}
+                  onChange={() => handleToggle(todo)}
+                />
+                {editId === todo.id ? (
+                  <div className="todo-edit-row">
+                    <input
+                      value={editTitle}
+                      onChange={(e) => setEditTitle(e.target.value)}
+                      onKeyDown={(e) => e.key === 'Enter' && handleEditSave(todo)}
+                      autoFocus
+                    />
+                    <button className="btn-primary" onClick={() => handleEditSave(todo)}>Save</button>
+                    <button className="btn-secondary" onClick={() => setEditId(null)}>Cancel</button>
+                  </div>
+                ) : (
+                  <span className="todo-title">{todo.title}</span>
+                )}
+                {todo.completed && <span className="todo-badge">Done ✓</span>}
+                <div className="todo-actions">
+                  <button onClick={() => { setEditId(todo.id); setEditTitle(todo.title); }}>✏️</button>
+                  <button onClick={() => setConfirmDelete(todo.id)}>🗑️</button>
+                </div>
+              </li>
+            ))
+          )}
         </ul>
       )}
- 
+
       {confirmDelete && (
         <ConfirmDialog
           message="Are you sure you want to delete this task?"
@@ -185,4 +203,3 @@ export default function Todos() {
     </div>
   );
 }
- 
