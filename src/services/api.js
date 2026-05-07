@@ -10,6 +10,33 @@ async function apiFetch(path, options = {}) {
   return res.json();
 }
 
+// POSTS
+export const getPostsByUser = async (userId) => {
+  const [posts, users] = await Promise.all([
+    apiFetch(`/posts?userId=${userId}`),
+    apiFetch('/users')
+  ]);
+
+  const result = posts.map(post => ({
+    ...post,
+    username: users.find(u => String(u.id) === String(post.userId))?.username || ''
+  }));
+
+  return result;
+};
+
+export const getAllPosts = async () => {
+  const [posts, users] = await Promise.all([
+    apiFetch('/posts'),
+    apiFetch('/users')
+  ]);
+
+  return posts.map(post => ({
+    ...post,
+    username: users.find(u => String(u.id) === String(post.userId))?.username || ''
+  }));
+};
+
 // USERS
 export const getUsers = () => apiFetch('/users');
 export const getUserById = (id) => apiFetch(`/users/${id}`);
@@ -22,7 +49,7 @@ export const updateTodo = (id, data) => apiFetch(`/todos/${id}`, { method: 'PUT'
 export const deleteTodo = (id) => apiFetch(`/todos/${id}`, { method: 'DELETE' });
 
 // POSTS
-export const getPostsByUser = (userId) => apiFetch(`/posts?userId=${userId}`);
+//export const getPostsByUser = (userId) => apiFetch(`/posts?userId=${userId}`);
 export const createPost = (data) => apiFetch('/posts', { method: 'POST', body: JSON.stringify(data) });
 export const updatePost = (id, data) => apiFetch(`/posts/${id}`, { method: 'PUT', body: JSON.stringify(data) });
 export const deletePost = (id) => apiFetch(`/posts/${id}`, { method: 'DELETE' });

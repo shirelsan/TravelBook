@@ -5,15 +5,18 @@ import { useToast } from '../components/Toast';
 import ConfirmDialog from '../components/ConfirmDialog';
 import Spinner from '../components/Spinner';
 import {
-  getPostsByUser, createPost, updatePost, deletePost,
+  getAllPosts,getPostsByUser, createPost, updatePost, deletePost,
   getCommentsByPost, createComment, updateComment, deleteComment
 } from '../services/api';
 import '../styles/Posts.css';
+
  
 export default function Posts() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const toast = useToast();
+
+  const [showMyPosts, setShowMyPosts] = useState(false);
  
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -22,7 +25,7 @@ export default function Posts() {
   const [showComments, setShowComments] = useState(false);
   const [loadingComments, setLoadingComments] = useState(false);
  
-  const [searchId, setSearchId] = useState('');
+  const [searchUsername, setSearchUsername] = useState('');
   const [searchTitle, setSearchTitle] = useState('');
  
   const [showAddPost, setShowAddPost] = useState(false);
@@ -45,7 +48,7 @@ export default function Posts() {
   const fetchPosts = async () => {
     setLoading(true);
     try {
-      const data = await getPostsByUser(user.id);
+      const data = await getAllPosts();
       setPosts(data);
     } finally {
       setLoading(false);
@@ -123,11 +126,25 @@ export default function Posts() {
  
   const isMyComment = (comment) => comment.email === user.email;
  
-  const filtered = posts.filter((p) => {
-    if (searchId && String(p.id) !== searchId) return false;
-    if (searchTitle && !p.title.toLowerCase().includes(searchTitle.toLowerCase())) return false;
-    return true;
-  });
+  const [filteredPosts, setfilteredPosts] = useState([]);
+
+useEffect(() => {
+  let result = posts;
+
+  if (showMyPosts) {
+    result = result.filter(p => String(p.userId) === String(user.id));
+  }
+
+  if (searchUsername.trim()) {
+    result = result.filter(p => p.username?.toLowerCase().includes(searchUsername.toLowerCase()));
+  }
+
+  if (searchTitle.trim()) {
+    result = result.filter(p => p.title?.toLowerCase().includes(searchTitle.toLowerCase()));
+  }
+
+  setfilteredPosts(result);
+}, [searchUsername, searchTitle, posts, showMyPosts]);
  
   return (
     <div className="posts-page">
@@ -137,8 +154,11 @@ export default function Posts() {
       </div>
  
       <div className="posts-search">
-        <input type="number" placeholder="Search by ID" value={searchId} onChange={(e) => setSearchId(e.target.value)} />
+        <input placeholder="Search by username" value={searchUsername} onChange={(e) => setSearchUsername(e.target.value)} />
         <input placeholder="Search by title" value={searchTitle} onChange={(e) => setSearchTitle(e.target.value)} />
+        <button className="btn-secondary" onClick={() => setShowMyPosts(!showMyPosts)}>
+          {showMyPosts ? '🌍 All Posts' : '👤 My Posts'}
+        </button>
         <button className="btn-primary" onClick={() => setShowAddPost(!showAddPost)}>
           {showAddPost ? 'Cancel' : '+ New Post'}
         </button>
@@ -154,21 +174,25 @@ export default function Posts() {
  
       <div className="posts-layout">
         <div className="posts-list">
-          {loading ? <Spinner text="Loading posts..." /> : filtered.length === 0 ? (
+          {loading ? <Spinner text="Loading posts..." /> : filteredPosts.length === 0 ? (
             <div className="empty-state">
               <span>📝</span>
               <p>{posts.length === 0 ? 'No posts yet. Write your first travel story!' : 'No posts match your search.'}</p>
             </div>
-          ) : filtered.map((post) => (
+          ) : filteredPosts.map((post) => (
             <div key={post.id} className={`post-item ${selectedPost?.id === post.id ? 'selected' : ''}`}>
               <div className="post-item-header" onClick={() => handleSelectPost(post)}>
-                <span className="post-id">#{post.id}</span>
+                <span className="post-id">@{post.username}</span>
                 <span className="post-item-title">{post.title}</span>
               </div>
               <div className="post-item-actions">
                 <button onClick={() => handleSelectPost(post)}>👁️</button>
-                <button onClick={() => { setEditPostId(post.id); setEditPostTitle(post.title); setEditPostBody(post.body); handleSelectPost(post); }}>✏️</button>
-                <button onClick={() => setConfirmDeletePost(post.id)}>🗑️</button>
+                {String(post.userId) === String(user.id) && (
+                  <>
+                    <button onClick={() => { setEditPostId(post.id); setEditPostTitle(post.title); setEditPostBody(post.body); handleSelectPost(post); }}>✏️</button>
+                    <button onClick={() => setConfirmDeletePost(post.id)}>🗑️</button>
+                  </>
+                )}
               </div>
             </div>
           ))}
