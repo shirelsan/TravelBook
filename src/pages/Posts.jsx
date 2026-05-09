@@ -102,7 +102,9 @@ export default function Posts() {
     e.preventDefault();
     if (!newCommentBody.trim()) return;
     const added = await createComment({
-      postId: selectedPost.id, name: user.name,
+      postId: typeof selectedPost.id === 'string' && !isNaN(selectedPost.id) 
+  ? Number(selectedPost.id)
+  : selectedPost.id, name: user.name,
       email: user.email, body: newCommentBody.trim()
     });
     setComments([...comments, added]);
