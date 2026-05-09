@@ -34,7 +34,7 @@ export const createUser = async (data) => {
   return newUser;
 };
 
-// הפונקציה החדשה לעדכון פרטי משתמש מה-InfoModal
+// הפונקציה לעדכון פרטי משתמש מה-InfoModal
 export const updateUser = async (id, data) => {
   const updatedUser = await apiFetch(`/users/${id}`, { method: 'PUT', body: JSON.stringify(data) });
   cache.users = null; // ניקוי ה-Cache כדי שהרשימה תתעדכן
@@ -82,7 +82,7 @@ export const getPostsByUser = async (userId) => {
   
   const [posts, users] = await Promise.all([
     apiFetch(`/posts?userId=${userId}`),
-    getUsers() // משתמש בפונקציה שלנו כדי להרוויח גם פה Cache!
+    getUsers() // שימוש ב-Cache של המשתמשים
   ]);
 
   const result = posts.map(post => ({
@@ -110,9 +110,10 @@ export const createPost = async (data) => {
   const normalizedData = { ...data, userId: String(data.userId) };
   const newPost = await apiFetch('/posts', { method: 'POST', body: JSON.stringify(normalizedData) });
   
+  // תוקן: מונע שגיאות כפילות ברינדור על ידי פריסה במקום push
   if (cache.posts[data.userId]) {
     newPost.username = cache.users?.find(u => String(u.id) === String(data.userId))?.username || '';
-    cache.posts[data.userId].push(newPost);
+    cache.posts[data.userId] = [...cache.posts[data.userId], newPost];
   }
   return newPost;
 };
@@ -152,7 +153,11 @@ export const getAlbumsByUser = async (userId) => {
 export const createAlbum = async (data) => {
   const normalizedData = { ...data, userId: String(data.userId) };
   const newAlbum = await apiFetch('/albums', { method: 'POST', body: JSON.stringify(normalizedData) });
-  if (cache.albums[data.userId]) cache.albums[data.userId].push(newAlbum);
+  
+  // תוקן: שימוש במערך חדש במקום push למניעת כפילויות
+  if (cache.albums[data.userId]) {
+    cache.albums[data.userId] = [...cache.albums[data.userId], newAlbum];
+  }
   return newAlbum;
 };
 
@@ -166,7 +171,7 @@ export const deleteAlbum = async (id, userId) => {
 
 // --- PHOTOS ---
 export const getPhotosByAlbum = (albumId, page = 1, limit = 6) =>
-  apiFetch(`/photos?albumId=${albumId}&_page=${page}&_limit=${limit}`);
+  apiFetch(`/photos?albumId=${albumId}&_page=${page}&_per_page=${limit}`);
 
 export const createPhoto = (data) => {
   const normalizedData = { ...data, albumId: String(data.albumId) };
@@ -175,3 +180,12 @@ export const createPhoto = (data) => {
 
 export const updatePhoto = (id, data) => apiFetch(`/photos/${id}`, { method: 'PUT', body: JSON.stringify(data) });
 export const deletePhoto = (id) => apiFetch(`/photos/${id}`, { method: 'DELETE' });
+
+export const updateAlbum = async (id, data) => {
+  const updated = await apiFetch(`/albums/${id}`, { method: 'PUT', body: JSON.stringify(data) });
+  // עדכון ה-Cache המקומי כדי שהשינוי ישתקף מיד
+  if (cache.albums[data.userId]) {
+    cache.albums[data.userId] = cache.albums[data.userId].map(a => a.id === id ? updated : a);
+  }
+  return updated;
+};

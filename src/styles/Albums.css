@@ -1,150 +1,288 @@
-.albums-page h2, .photos-page h2 { font-size: 1.8rem; color: #0d4d66; margin-bottom: 24px; }
- 
-.albums-toolbar {
-  display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; align-items: center;
-}
-.albums-toolbar input { width: 150px; }
- 
-.album-add-form {
-  background: white; border-radius: 12px; padding: 16px;
-  margin-bottom: 24px; display: flex; gap: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-}
-.album-add-form input { flex: 1; }
- 
-/* Album grid – square cards with cover image */
-.albums-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 20px;
-}
- 
-.album-card {
-  background: white;
-  border-radius: 14px;
-  overflow: hidden;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.09);
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+/* Header & Buttons */
+.page-header, .photos-header {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  background: white;
+  padding: 15px 25px;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
-.album-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
- 
-.album-cover {
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
-  display: block;
-  background: #e8e0d5;
+
+.header-left { display: flex; align-items: center; gap: 20px; }
+
+.btn-add-main {
+  background: #1a6b8a;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 10px rgba(26, 107, 138, 0.3);
 }
- 
-.album-cover-placeholder {
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  background: linear-gradient(135deg, #c8d8e0 0%, #dce8c8 100%);
+.btn-add-main:hover { background: #0d4d66; transform: scale(1.05); }
+
+/* כפתורי חזרה ובית - מעודכנים לעיצוב גלולה מודרני ותואם לכפתור ההוספה */
+.btn-back, .btn-home {
+  background: #ede8e0;
+  color: #0d4d66;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 30px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  transition: all 0.3s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn-back:hover, .btn-home:hover {
+  background: #1a6b8a;
+  color: white;
+  transform: scale(1.05);
+}
+
+/* Top Add Section */
+.top-add-section {
+  background: #fdfbf7;
+  border: 1px solid #ede8e0;
+  border-radius: 15px;
+  padding: 25px;
+  margin-bottom: 30px;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.modern-form { display: flex; gap: 15px; }
+.modern-form input { flex: 1; padding: 12px; border-radius: 10px; }
+
+.modern-photo-form { display: flex; gap: 25px; align-items: center; }
+
+.upload-zone {
+  width: 150px;
+  height: 100px;
+  border: 2px dashed #c8bfb0;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 48px;
+  cursor: pointer;
+  overflow: hidden;
+  background: white;
 }
- 
-.album-info {
-  padding: 12px 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  flex: 1;
+.preview-img { width: 100%; height: 100%; object-fit: cover; }
+.form-inputs { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+
+/* Albums Toolbar */
+.albums-toolbar {
+  display: flex; 
+  gap: 15px; 
+  flex-wrap: wrap; 
+  margin-bottom: 50px; 
+  align-items: center;
 }
-.album-id { font-size: 11px; color: #9e9080; }
-.album-title {
-  font-size: 13px;
-  font-weight: 600;
-  color: #0d4d66;
-  line-height: 1.3;
+.albums-toolbar input { width: 180px; padding: 10px; }
+
+/* Albums Grid (Main Page) */
+.albums-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 25px;
 }
- 
-.album-footer {
-  padding: 8px 14px 12px;
-  display: flex;
-  justify-content: flex-end;
+
+.album-card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  cursor: pointer;
+  transition: 0.3s;
 }
-.album-delete {
-  background: none; border: none; cursor: pointer; font-size: 15px;
-  padding: 4px 6px; border-radius: 6px; transition: background 0.2s; color: #9e9080;
-}
-.album-delete:hover { background: #fde8e6; color: #c0392b; }
- 
-/* Photos */
-.photos-header {
-  display: flex; align-items: center; gap: 16px; margin-bottom: 24px; flex-wrap: wrap;
-}
-.photos-header h2 { flex: 1; }
-.btn-back {
-  background: none; border: 2px solid #1a6b8a; color: #1a6b8a;
-  padding: 8px 14px; border-radius: 8px; cursor: pointer;
-  font-family: 'DM Sans', sans-serif; font-size: 13px; transition: all 0.2s;
-}
-.btn-back:hover { background: #1a6b8a; color: white; }
- 
-.photo-add-form {
-  background: white; border-radius: 12px; padding: 16px;
-  margin-bottom: 24px; display: flex; gap: 10px; flex-wrap: wrap;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-}
-.photo-add-form input { flex: 1; min-width: 160px; }
- 
+.album-card:hover { transform: translateY(-5px); }
+.album-cover-img { width: 100%; height: 220px; object-fit: cover; }
+.album-cover-placeholder { height: 220px; display: flex; align-items: center; justify-content: center; font-size: 60px; background: #f5ede0; }
+.album-info { padding: 15px; text-align: left; }
+.album-title { display: block; font-weight: 700; color: #0d4d66; font-size: 17px; }
+.album-id { font-size: 12px; color: #9e9080; }
+
+/* Polaroid Photos Grid */
 .photos-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 16px;
-  margin-bottom: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 35px;
 }
- 
-.photo-card {
-  background: white; border-radius: 12px; overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+
+.photo-card-polaroid {
+  background: white;
+  padding: 12px 12px 18px 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  border-radius: 4px;
+  transition: transform 0.3s;
 }
-.photo-card img {
-  width: 100%; height: 140px; object-fit: cover; cursor: pointer; display: block;
+.photo-card-polaroid:hover { transform: rotate(1deg) scale(1.02); }
+
+.polaroid-img-wrap {
+  width: 100%;
+  height: 320px;
+  overflow: hidden;
+  background: #eee;
+  margin-bottom: 12px;
+  cursor: pointer;
 }
-.photo-card img:hover { opacity: 0.9; }
- 
-.photo-title { font-size: 12px; color: #4a3f35; padding: 8px 10px 4px; line-height: 1.3; }
- 
-.photo-edit { display: flex; gap: 6px; padding: 6px 10px; flex-wrap: wrap; }
-.photo-edit input { flex: 1; font-size: 12px; padding: 4px 8px; }
-.photo-edit button {
-  font-size: 12px; padding: 4px 8px; border-radius: 6px; border: none; cursor: pointer;
+.polaroid-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+
+.polaroid-caption {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  color: #4a3f35;
+  padding: 0 5px;
 }
-.photo-edit button:first-of-type { background: #1a6b8a; color: white; }
-.photo-edit button:last-of-type { background: #ede8e0; }
- 
-.photo-actions {
-  display: flex; gap: 6px; padding: 4px 8px 10px;
-}
-.photo-actions button {
-  background: none; border: none; cursor: pointer; font-size: 14px;
-  padding: 3px 6px; border-radius: 6px;
-}
-.photo-actions button:hover { background: #f5ede0; }
- 
-.load-more { text-align: center; margin: 16px 0; }
- 
-/* Lightbox */
+
+.btn-mini-del { background: none; border: none; cursor: pointer; opacity: 0.3; transition: 0.2s; }
+.btn-mini-del:hover { opacity: 1; transform: scale(1.2); }
+
+/* Lightbox - תצוגת פופ-אפ מרכזית, מעוגלת ואלגנטית */
 .lightbox-overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.85);
-  display: flex; align-items: center; justify-content: center; z-index: 1000;
+  position: fixed; 
+  inset: 0; 
+  background: rgba(0, 0, 0, 0.85);
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  z-index: 9999;
 }
+
 .lightbox-content {
-  position: relative; background: white; border-radius: 16px;
-  padding: 20px; max-width: 700px; width: 90%;
+  position: relative; 
+  background: white; 
+  border-radius: 20px;
+  padding: 24px; 
+  max-width: 750px; 
+  width: 90%;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-.lightbox-content img { width: 100%; border-radius: 8px; display: block; }
-.lightbox-content p { text-align: center; margin-top: 12px; color: #4a3f35; font-size: 14px; }
+
+.lightbox-content img { 
+  width: 100%; 
+  max-height: 70vh;
+  object-fit: contain;
+  border-radius: 12px; 
+  display: block; 
+}
+
+.lightbox-title { 
+  text-align: center; 
+  margin-top: 16px; 
+  color: #0d4d66; 
+  font-size: 17px; 
+  font-weight: 700; 
+}
+
 .lightbox-close {
-  position: absolute; top: 12px; right: 12px;
-  background: #0d4d66; color: white; border: none;
-  border-radius: 50%; width: 32px; height: 32px;
-  cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center;
+  position: absolute; 
+  top: -15px; 
+  right: -15px;
+  background: #c0392b; 
+  color: white; 
+  border: 2px solid white;
+  border-radius: 50%; 
+  width: 36px; 
+  height: 36px;
+  cursor: pointer; 
+  font-size: 16px; 
+  font-weight: bold;
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  transition: transform 0.2s;
 }
- 
+.lightbox-close:hover { transform: scale(1.1); background: #a93226; }
+
+/* Inline Edit inside Polaroid */
+.polaroid-edit-box {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  padding: 0 4px;
+}
+.polaroid-edit-box input {
+  flex: 1;
+  padding: 4px 8px;
+  font-size: 13px;
+  border-radius: 6px;
+  border: 1px solid #1a6b8a;
+}
+.btn-mini-save, .btn-mini-cancel {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 4px;
+}
+.btn-mini-save { color: #27ae60; }
+
+.caption-actions {
+  display: flex;
+  gap: 2px;
+}
+.btn-mini-action {
+  background: none;
+  border: none;
+  cursor: pointer;
+  opacity: 0.35;
+  transition: all 0.2s;
+  font-size: 14px;
+  padding: 2px 4px;
+}
+.btn-mini-action:hover {
+  opacity: 1;
+  transform: scale(1.15);
+}
+.caption-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Album List Editing Styles */
+.album-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 5px;
+}
+.album-edit-inline {
+  display: flex;
+  gap: 5px;
+  width: 100%;
+}
+.album-edit-inline input {
+  flex: 1;
+  padding: 5px;
+  border: 1px solid #1a6b8a;
+  border-radius: 4px;
+  font-size: 14px;
+}
+.album-click-area {
+  cursor: pointer;
+}
+.album-title {
+  cursor: pointer;
+  display: block;
+}
