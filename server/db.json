@@ -223,10 +223,17 @@
       "id": "v5PbApfAPP4"
     },
     {
+<<<<<<< HEAD
       "userId": "3UNjKbPLedo",
       "title": "Buy a noget bamba",
       "completed": true,
       "id": "pDR9LXAyUDc"
+=======
+      "userId": "id7L8xugBtU",
+      "title": "buy sunglasses",
+      "completed": false,
+      "id": "b7qEEaNtC18"
+>>>>>>> 222526873b82329fa922714045bfb6acc986b7b6
     }
   ],
   "posts": [
@@ -383,11 +390,19 @@
       "id": "LyZs3U1qB64"
     },
     {
+<<<<<<< HEAD
       "postId": "1",
       "name": "corona virus",
       "email": "co@g.m",
       "body": "how was the growing?",
       "id": "V2sPRxTS3Eo"
+=======
+      "postId": 1,
+      "name": "הלל",
+      "email": "hillel@g.il",
+      "body": "שלום",
+      "id": "5zg0a96UTDI"
+>>>>>>> 222526873b82329fa922714045bfb6acc986b7b6
     }
   ],
   "albums": [
@@ -437,6 +452,7 @@
       "id": "2UoB3RJ4_tY"
     },
     {
+<<<<<<< HEAD
       "userId": "3UNjKbPLedo",
       "title": "rome 2026",
       "id": "HN8eWW59BEg"
@@ -445,6 +461,11 @@
       "userId": "3UNjKbPLedo",
       "title": "creitim",
       "id": "Jv4RrWhYEjA"
+=======
+      "userId": "id7L8xugBtU",
+      "title": "jerusalem",
+      "id": "fXs7lTNvcv4"
+>>>>>>> 222526873b82329fa922714045bfb6acc986b7b6
     }
   ],
   "photos": [
