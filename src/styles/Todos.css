@@ -1,68 +1,233 @@
-.todos-page h2 { font-size: 1.8rem; color: #0d4d66; margin-bottom: 24px; }
+/* ==========================================================================
+   Travel Journal Todos Page Styles
+   ========================================================================== */
 
+.todos-page h2 { 
+  font-size: 2rem; 
+  color: #0d4d66; 
+  margin-bottom: 24px; 
+  font-weight: 700;
+}
+
+/* --- Old Add Form (kept for compatibility) --- */
 .todo-add-form {
   display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
+  gap: 12px;
+  margin-bottom: 25px;
 }
-.todo-add-form input { flex: 1; }
+
+.todo-add-form input { 
+  flex: 1; 
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid #c8bfb0;
+  font-size: 14px;
+}
+
+.todo-add-form input:focus {
+  outline: none;
+  border-color: #1a6b8a;
+}
+
 .todo-add-form button {
   background: #1a6b8a;
   color: white;
   border: none;
-  padding: 8px 20px;
-  border-radius: 8px;
+  padding: 10px 24px;
+  border-radius: 12px;
   cursor: pointer;
   font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
   white-space: nowrap;
+  transition: all 0.2s;
 }
 
+.todo-add-form button:hover {
+  background: #0d4d66;
+  transform: scale(1.03);
+}
+
+/* --- Search & Filters Toolbar --- */
 .todo-filters {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   flex-wrap: wrap;
-  margin-bottom: 24px;
+  margin-bottom: 30px;
+  align-items: center;
+  background: #fdfbf7;
+  padding: 15px 20px;
+  border-radius: 16px;
+  border: 1px solid #ede8e0;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.02);
 }
-.todo-filters input { width: 140px; }
 
-.todo-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.todo-filters input, .todo-filters select { 
+  width: 150px; 
+  padding: 10px 16px;
+  border-radius: 30px;
+  border: 1px solid #c8bfb0;
+  background: white;
+  font-size: 13px;
+  color: #4a3f35;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  flex-grow: 1;
+}
 
+.todo-filters input:focus, .todo-filters select:focus {
+  outline: none;
+  border-color: #1a6b8a;
+  box-shadow: 0 0 0 3px rgba(26, 107, 138, 0.1);
+}
+
+/* --- Todo List Container --- */
+.todo-list { 
+  list-style: none; 
+  display: flex; 
+  flex-direction: column; 
+  gap: 12px; 
+  padding-left: 0;
+}
+
+/* --- Todo Card Item --- */
 .todo-item {
   background: white;
-  border-radius: 10px;
-  padding: 12px 16px;
+  border-radius: 16px;
+  padding: 14px 20px;
   display: flex;
   align-items: center;
-  gap: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-  transition: opacity 0.2s;
+  gap: 15px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  border: 1px solid #ede8e0;
+  transition: all 0.25s ease;
 }
-.todo-item.done { opacity: 0.6; }
-.todo-item.done .todo-title { text-decoration: line-through; color: #9e9080; }
 
-.todo-id { font-size: 12px; color: #9e9080; min-width: 28px; }
-.todo-title { flex: 1; font-size: 14px; }
+.todo-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+}
 
-.todo-edit-row { flex: 1; display: flex; gap: 8px; align-items: center; }
-.todo-edit-row input { flex: 1; }
-.todo-edit-row button {
+/* מצב משימה שהושלמה (Done) */
+.todo-item.done { 
+  background: #fdfbf7;
+  opacity: 0.75; 
+  border-color: #e5dfd5;
+}
+
+.todo-item.done .todo-title { 
+  text-decoration: line-through; 
+  color: #9e9080; 
+}
+
+/* עיצוב נקי לתיבת הסימון */
+.todo-item input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #1a6b8a;
+  cursor: pointer;
+}
+
+.todo-id { 
+  font-size: 12px; 
+  color: #9e9080; 
+  min-width: 35px; 
+  font-weight: 600;
+}
+
+.todo-title { 
+  flex: 1; 
+  font-size: 15px; 
+  color: #0d4d66;
+  font-weight: 500;
+}
+
+/* תגית ביצוע במידה וקיימת */
+.todo-badge {
+  background: #e8f5e9;
+  color: #27ae60;
+  font-size: 11px;
+  font-weight: 600;
   padding: 4px 10px;
-  border-radius: 6px;
+  border-radius: 20px;
+  margin-right: 5px;
+}
+
+/* --- Inline Edit / Add Row --- */
+.todo-edit-row { 
+  flex: 1; 
+  display: flex; 
+  gap: 10px; 
+  align-items: center; 
+  width: 100%;
+}
+
+.todo-edit-row input { 
+  flex: 1; 
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #1a6b8a;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.todo-edit-row input:focus {
+  outline: none;
+}
+
+.todo-edit-row button {
+  padding: 8px 16px;
+  border-radius: 8px;
   border: none;
   cursor: pointer;
   font-size: 13px;
+  font-weight: 600;
+  transition: all 0.2s;
 }
-.todo-edit-row button:first-of-type { background: #1a6b8a; color: white; }
-.todo-edit-row button:last-of-type { background: #ede8e0; }
 
-.todo-actions { display: flex; gap: 6px; }
-.todo-actions button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-  padding: 4px;
-  border-radius: 6px;
-  transition: background 0.2s;
+.todo-edit-row button.btn-primary,
+.todo-edit-row button:first-of-type { 
+  background: #1a6b8a; 
+  color: white; 
 }
-.todo-actions button:hover { background: #f5ede0; }
+
+.todo-edit-row button.btn-primary:hover,
+.todo-edit-row button:first-of-type:hover { 
+  background: #0d4d66; 
+}
+
+.todo-edit-row button.btn-secondary,
+.todo-edit-row button:last-of-type { 
+  background: #ede8e0; 
+  color: #4a3f35;
+}
+
+.todo-edit-row button.btn-secondary:hover,
+.todo-edit-row button:last-of-type:hover { 
+  background: #c8bfb0; 
+}
+
+/* --- Action Buttons (Edit / Delete) --- */
+.todo-actions { 
+  display: flex; 
+  gap: 6px; 
+}
+
+.todo-actions button {
+  background: #f9f6f2;
+  border: 1px solid #ede8e0;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 6px;
+  border-radius: 8px;
+  transition: all 0.2s;
+  color: #9e9080;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.todo-actions button:hover { 
+  background: #1a6b8a; 
+  border-color: #1a6b8a;
+  transform: scale(1.1);
+}

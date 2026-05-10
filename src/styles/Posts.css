@@ -1,98 +1,313 @@
-.posts-page h2 { font-size: 1.8rem; color: #0d4d66; margin-bottom: 24px; }
+/* ==========================================================================
+   Travel Journal Posts Page Styles
+   ========================================================================== */
 
+.posts-page h2 { 
+  font-size: 2rem; 
+  color: #0d4d66; 
+  margin-bottom: 24px; 
+  font-weight: 700;
+}
+
+/* --- Search & Filters Toolbar --- */
 .posts-search {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   flex-wrap: wrap;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
   align-items: center;
+  background: #fdfbf7;
+  padding: 15px 20px;
+  border-radius: 16px;
+  border: 1px solid #ede8e0;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.02);
 }
-.posts-search input { width: 160px; }
 
-.post-add-form {
+.posts-search input { 
+  width: 160px; 
+  padding: 10px 16px;
+  border-radius: 30px;
+  border: 1px solid #c8bfb0;
   background: white;
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 24px;
+  font-size: 13px;
+  color: #4a3f35;
+  transition: all 0.3s ease;
+}
+
+.posts-search input:focus {
+  outline: none;
+  border-color: #1a6b8a;
+  box-shadow: 0 0 0 3px rgba(26, 107, 138, 0.1);
+}
+
+/* --- New Post Form --- */
+.post-add-form {
+  background: #fdfbf7;
+  border-radius: 20px;
+  padding: 25px;
+  margin-bottom: 30px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  gap: 15px;
+  border: 1px solid #ede8e0;
+  box-shadow: 0 8px 24px rgba(13, 77, 102, 0.06);
 }
-.post-add-form input, .post-add-form textarea { width: 100%; }
 
+.post-add-form input, .post-add-form textarea { 
+  width: 100%; 
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid #c8bfb0;
+  font-family: inherit;
+  font-size: 14px;
+  background: white;
+  transition: border-color 0.3s;
+}
+
+.post-add-form input:focus, .post-add-form textarea:focus {
+  outline: none;
+  border-color: #1a6b8a;
+}
+
+/* --- Layout Grid --- */
 .posts-layout {
   display: grid;
-  grid-template-columns: 320px 1fr;
-  gap: 24px;
+  grid-template-columns: 340px 1fr;
+  gap: 30px;
 }
 
 @media (max-width: 900px) {
   .posts-layout { grid-template-columns: 1fr; }
 }
 
-.posts-list { display: flex; flex-direction: column; gap: 8px; }
+/* --- Posts Sidebar List (Journal Tabs) --- */
+.posts-list { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 12px; 
+}
 
 .post-item {
   background: white;
-  border-radius: 10px;
-  padding: 12px 14px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-  border: 2px solid transparent;
-  transition: border-color 0.2s;
+  border-radius: 16px;
+  padding: 16px 18px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  border: 1px solid #ede8e0;
+  border-left: 4px solid transparent; /* הכנה לסימון הלשונית */
+  transition: all 0.25s ease;
 }
-.post-item.selected { border-color: #1a6b8a; }
+
+.post-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+}
+
+.post-item.selected { 
+  background: #fdfbf7;
+  border-left: 5px solid #1a6b8a;
+  border-color: #1a6b8a #ede8e0 #ede8e0 #ede8e0;
+}
 
 .post-item-header {
   display: flex;
   gap: 8px;
   align-items: flex-start;
   cursor: pointer;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
-.post-id { font-size: 11px; color: #9e9080; min-width: 28px; margin-top: 2px; }
-.post-item-title { font-size: 13px; font-weight: 500; color: #0d4d66; line-height: 1.4; }
 
-.post-item-actions { display: flex; gap: 6px; }
+.post-id { 
+  font-size: 12px; 
+  color: #9e9080; 
+  min-width: 35px; 
+  margin-top: 2px; 
+  font-weight: 600;
+}
+
+.post-author {
+  font-size: 12px;
+  color: #1a6b8a;
+  font-weight: 600;
+}
+
+.post-item-title { 
+  font-size: 14px; 
+  font-weight: 600; 
+  color: #0d4d66; 
+  line-height: 1.4; 
+  flex: 1;
+}
+
+.post-item-actions { 
+  display: flex; 
+  gap: 6px; 
+  justify-content: flex-end;
+}
+
 .post-item-actions button {
-  background: none; border: none; cursor: pointer; font-size: 15px;
-  padding: 3px 6px; border-radius: 6px; transition: background 0.2s;
+  background: #f9f6f2; 
+  border: 1px solid #ede8e0; 
+  cursor: pointer; 
+  font-size: 14px;
+  padding: 5px 10px; 
+  border-radius: 8px; 
+  transition: all 0.2s;
 }
-.post-item-actions button:hover { background: #f5ede0; }
 
+.post-item-actions button:hover { 
+  background: #1a6b8a; 
+  color: white;
+  border-color: #1a6b8a;
+  transform: scale(1.05);
+}
+
+/* --- Post Detail (The Travel Log Page) --- */
 .post-detail {
-  background: white;
-  border-radius: 12px;
-  padding: 28px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  background: #fdfbf7; /* צבע נייר טבעי וחם */
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: 0 10px 35px rgba(13, 77, 102, 0.08);
+  border: 1px solid #ede8e0;
+  position: relative;
 }
-.post-detail h3 { font-size: 1.4rem; color: #0d4d66; margin-bottom: 14px; }
-.post-body { color: #4a3f35; line-height: 1.7; margin-bottom: 20px; }
 
-.post-edit-form { display: flex; flex-direction: column; gap: 12px; }
-.post-edit-form input, .post-edit-form textarea { width: 100%; }
+/* סימניית עיטור כחולה בראש הדף */
+.post-detail::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 35px;
+  right: 35px;
+  height: 4px;
+  background: #1a6b8a;
+  border-radius: 0 0 4px 4px;
+  opacity: 0.85;
+}
+
+.post-detail h3 { 
+  font-size: 1.8rem; 
+  color: #0d4d66; 
+  margin-bottom: 20px; 
+  font-weight: 700;
+  border-bottom: 2px dashed #ede8e0; /* מראה של מחברת מסע */
+  padding-bottom: 16px;
+}
+
+.post-body { 
+  color: #4a3f35; 
+  font-size: 1.05rem;
+  line-height: 1.8; 
+  margin-bottom: 30px; 
+  white-space: pre-wrap; /* שומר על פסקאות ושורות חדשות שהמשתמש הקליד */
+}
+
+/* --- Edit Form inside Detail --- */
+.post-edit-form { display: flex; flex-direction: column; gap: 15px; }
+.post-edit-form input, .post-edit-form textarea { 
+  width: 100%; 
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #1a6b8a;
+  font-family: inherit;
+}
 .edit-actions { display: flex; gap: 10px; }
 
-.comments-section { margin-top: 24px; border-top: 1px solid #ede8e0; padding-top: 20px; }
-.comments-section h4 { font-size: 1rem; color: #1a6b8a; margin-bottom: 14px; }
+/* --- Comments Section (Appended Notes) --- */
+.comments-section { 
+  margin-top: 35px; 
+  border-top: 2px solid #ede8e0; 
+  padding-top: 25px; 
+}
 
-.comments-list { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
+.comments-section h4 { 
+  font-size: 1.2rem; 
+  color: #1a6b8a; 
+  margin-bottom: 20px; 
+  font-weight: 700;
+}
+
+.comments-list { 
+  list-style: none; 
+  display: flex; 
+  flex-direction: column; 
+  gap: 16px; 
+  margin-bottom: 25px; 
+  padding-left: 0;
+}
 
 .comment-item {
-  background: #f9f6f2;
-  border-radius: 10px;
-  padding: 12px 14px;
+  background: white;
+  border-radius: 16px;
+  padding: 16px 20px;
+  border: 1px solid #ede8e0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
 }
-.comment-meta { font-size: 12px; margin-bottom: 6px; color: #9e9080; }
-.comment-meta strong { color: #1a6b8a; margin-right: 6px; }
-.comment-item p { font-size: 13px; color: #4a3f35; }
 
-.comment-actions { display: flex; gap: 6px; margin-top: 8px; }
+.comment-meta { 
+  font-size: 13px; 
+  margin-bottom: 8px; 
+  color: #9e9080; 
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.comment-meta strong { 
+  color: #1a6b8a; 
+  font-size: 14px; 
+}
+
+.comment-item p { 
+  font-size: 14px; 
+  color: #4a3f35; 
+  line-height: 1.5;
+}
+
+.comment-actions { 
+  display: flex; 
+  gap: 8px; 
+  margin-top: 10px; 
+  justify-content: flex-end;
+}
+
 .comment-actions button {
-  background: none; border: none; cursor: pointer; font-size: 14px;
-  padding: 2px 6px; border-radius: 6px;
+  background: #f9f6f2; 
+  border: none; 
+  cursor: pointer; 
+  font-size: 13px;
+  padding: 4px 8px; 
+  border-radius: 6px;
+  color: #9e9080;
+  transition: all 0.2s;
 }
-.comment-actions button:hover { background: #ede8e0; }
 
-.add-comment-form { display: flex; flex-direction: column; gap: 10px; }
-.add-comment-form textarea { width: 100%; }
+.comment-actions button:hover { 
+  background: #c0392b; /* אדום עדין למחיקה */
+  color: white; 
+}
+
+/* --- Add Comment Form --- */
+.add-comment-form { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 12px; 
+  background: white;
+  padding: 20px;
+  border-radius: 16px;
+  border: 1px solid #ede8e0;
+}
+
+.add-comment-form textarea { 
+  width: 100%; 
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #c8bfb0;
+  font-family: inherit;
+  font-size: 14px;
+  resize: vertical;
+}
+
+.add-comment-form textarea:focus {
+  outline: none;
+  border-color: #1a6b8a;
+}

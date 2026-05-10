@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../components/Toast';
 import ConfirmDialog from '../components/ConfirmDialog';
@@ -14,9 +14,11 @@ export default function Posts() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const toast = useToast();
+  
+  // סנכרון מזהה הפוסט הפתוח מול שורת הכתובות (חלק ז' - עמידות בריענון עמוד)
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const [showMyPosts, setShowMyPosts] = useState(false);
- 
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedPost, setSelectedPost] = useState(null);
@@ -24,6 +26,8 @@ export default function Posts() {
   const [showComments, setShowComments] = useState(false);
   const [loadingComments, setLoadingComments] = useState(false);
  
+  // שדות החיפוש - הורחב לכלול חיפוש לפי ID כנדרש במטלה
+  const [searchId, setSearchId] = useState('');
   const [searchUsername, setSearchUsername] = useState('');
   const [searchTitle, setSearchTitle] = useState('');
  
@@ -42,6 +46,7 @@ export default function Posts() {
   const [confirmDeletePost, setConfirmDeletePost] = useState(null);
   const [confirmDeleteComment, setConfirmDeleteComment] = useState(null);
  
+  // טעינה ראשונית של הפוסטים
   useEffect(() => { fetchPosts(); }, [user]);
  
   const fetchPosts = async () => {
@@ -53,6 +58,17 @@ export default function Posts() {
       setLoading(false);
     }
   };
+
+  // פתיחה אוטומטית של פוסט אם המזהה שלו קיים ב-URL (לאחר ריענון עמוד)
+  useEffect(() => {
+    const urlPostId = searchParams.get('postId');
+    if (posts.length > 0 && urlPostId) {
+      const found = posts.find(p => String(p.id) === String(urlPostId));
+      if (found && (!selectedPost || String(selectedPost.id) !== String(urlPostId))) {
+        setSelectedPost(found);
+      }
+    }
+  }, [posts, searchParams]);
  
   const handleAddPost = async (e) => {
     e.preventDefault();
@@ -66,7 +82,11 @@ export default function Posts() {
   const handleDeletePost = async (id) => {
     await deletePost(id);
     setPosts(posts.filter((p) => p.id !== id));
-    if (selectedPost?.id === id) { setSelectedPost(null); setShowComments(false); }
+    if (selectedPost?.id === id) { 
+      setSelectedPost(null); 
+      setShowComments(false); 
+      setSearchParams({}); // ניקוי ה-URL
+    }
     setConfirmDeletePost(null);
     toast('Post deleted', 'error');
   };
@@ -83,8 +103,12 @@ export default function Posts() {
     toast('Post updated');
   };
  
+  // בחירת פוסט מעדכנת את הסטייט וגם את שורת הכתובות ללא ריענון
   const handleSelectPost = (post) => {
-    setSelectedPost(post); setShowComments(false); setComments([]);
+    setSelectedPost(post); 
+    setShowComments(false); 
+    setComments([]);
+    setSearchParams({ postId: post.id });
   };
  
   const handleShowComments = async (post) => {
@@ -131,11 +155,16 @@ export default function Posts() {
  
   const [filteredPosts, setfilteredPosts] = useState([]);
 
+  // סינון הפוסטים כולל כעת בדיקת ID, כותרת ושם משתמש
   useEffect(() => {
     let result = posts;
 
     if (showMyPosts) {
       result = result.filter(p => String(p.userId) === String(user.id));
+    }
+
+    if (searchId.trim()) {
+      result = result.filter(p => String(p.id).includes(searchId.trim()));
     }
 
     if (searchUsername.trim()) {
@@ -147,18 +176,22 @@ export default function Posts() {
     }
 
     setfilteredPosts(result);
-  }, [searchUsername, searchTitle, posts, showMyPosts]);
+  }, [searchId, searchUsername, searchTitle, posts, showMyPosts, user]);
  
   return (
     <div className="posts-page">
       <div className="page-header">
+        {/* תוקן לניווט המדויק עם H גדולה */}
         <button className="btn-home" onClick={() => navigate('/Home')}>🏠 Home</button>
         <h2>📝 My Travel Journal</h2>
       </div>
  
       <div className="posts-search">
+        {/* הוספת שדה חיפוש לפי ID בהתאם לדרישת המטלה */}
+        <input placeholder="Search by ID" value={searchId} onChange={(e) => setSearchId(e.target.value)} style={{ width: '130px' }} />
         <input placeholder="Search by username" value={searchUsername} onChange={(e) => setSearchUsername(e.target.value)} />
         <input placeholder="Search by title" value={searchTitle} onChange={(e) => setSearchTitle(e.target.value)} />
+        
         <button className="btn-secondary" onClick={() => setShowMyPosts(!showMyPosts)}>
           {showMyPosts ? '🌍 All Posts' : '👤 My Posts'}
         </button>
@@ -185,9 +218,16 @@ export default function Posts() {
           ) : filteredPosts.map((post) => (
             <div key={post.id} className={`post-item ${selectedPost?.id === post.id ? 'selected' : ''}`}>
               <div className="post-item-header" onClick={() => handleSelectPost(post)}>
-                <span className="post-id">@{post.username}</span>
+                {/* דרישת חובה: תצוגת המזהה הייחודי (ID) והכותרת במצב סקירה */}
+                <span className="post-id" style={{ fontWeight: 'bold', color: '#9e9080', marginRight: '6px' }}>
+                  #{String(post.id).substring(0, 4)}
+                </span>
+                <span className="post-author" style={{ color: '#1a6b8a', marginRight: '8px' }}>
+                  @{post.username}
+                </span>
                 <span className="post-item-title">{post.title}</span>
               </div>
+              
               <div className="post-item-actions">
                 <button onClick={() => handleSelectPost(post)}>👁️</button>
                 {String(post.userId) === String(user.id) && (
@@ -208,13 +248,16 @@ export default function Posts() {
                 <input value={editPostTitle} onChange={(e) => setEditPostTitle(e.target.value)} />
                 <textarea value={editPostBody} onChange={(e) => setEditPostBody(e.target.value)} rows={5} />
                 <div className="edit-actions">
-                  <button className="btn-primary" onClick={handleEditPostSave}>Save</button>
+                  <button className="btn-primary" onClick={handleEditSave}>Save</button>
                   <button onClick={() => setEditPostId(null)}>Cancel</button>
                 </div>
               </div>
             ) : (
               <>
-                <h3>{selectedPost.title}</h3>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <h3>{selectedPost.title}</h3>
+                  <button onClick={() => { setSelectedPost(null); setSearchParams({}); }} style={{ background: 'none', border: 'none', fontSize: '18px', cursor: 'pointer' }}>✕</button>
+                </div>
                 <p className="post-body">{selectedPost.body}</p>
                 <button className="btn-secondary" onClick={() => handleShowComments(selectedPost)}>
                   💬 Show Comments
