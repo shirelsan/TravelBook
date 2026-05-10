@@ -23,7 +23,7 @@ export default function Login() {
       );
       if (found) {
         login(found);
-        navigate(`/users/${found.id}`);
+        navigate('/Home'); // הניווט תוקן לכתובת הבית
       } else {
         setError('Invalid username or password. Please try again.');
       }
@@ -76,4 +76,3 @@ export default function Login() {
     </div>
   );
 }
- 

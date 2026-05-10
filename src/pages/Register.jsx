@@ -12,7 +12,6 @@ export default function Register() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Step 2 – extra details
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
@@ -61,7 +60,7 @@ export default function Register() {
       };
       const created = await createUser(newUser);
       login(created);
-      navigate(`/users/${created.id}`);
+      navigate('/Home'); // הניווט תוקן לכתובת הבית
     } catch {
       setError('Failed to register. Please try again.');
     } finally {

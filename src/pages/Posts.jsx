@@ -5,12 +5,11 @@ import { useToast } from '../components/Toast';
 import ConfirmDialog from '../components/ConfirmDialog';
 import Spinner from '../components/Spinner';
 import {
-  getAllPosts,getPostsByUser, createPost, updatePost, deletePost,
+  getAllPosts, createPost, updatePost, deletePost,
   getCommentsByPost, createComment, updateComment, deleteComment
 } from '../services/api';
 import '../styles/Posts.css';
 
- 
 export default function Posts() {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -103,9 +102,11 @@ export default function Posts() {
     if (!newCommentBody.trim()) return;
     const added = await createComment({
       postId: typeof selectedPost.id === 'string' && !isNaN(selectedPost.id) 
-  ? Number(selectedPost.id)
-  : selectedPost.id, name: user.name,
-      email: user.email, body: newCommentBody.trim()
+        ? Number(selectedPost.id)
+        : selectedPost.id, 
+      name: user.name,
+      email: user.email, 
+      body: newCommentBody.trim()
     });
     setComments([...comments, added]);
     setNewCommentBody('');
@@ -130,28 +131,28 @@ export default function Posts() {
  
   const [filteredPosts, setfilteredPosts] = useState([]);
 
-useEffect(() => {
-  let result = posts;
+  useEffect(() => {
+    let result = posts;
 
-  if (showMyPosts) {
-    result = result.filter(p => String(p.userId) === String(user.id));
-  }
+    if (showMyPosts) {
+      result = result.filter(p => String(p.userId) === String(user.id));
+    }
 
-  if (searchUsername.trim()) {
-    result = result.filter(p => p.username?.toLowerCase().includes(searchUsername.toLowerCase()));
-  }
+    if (searchUsername.trim()) {
+      result = result.filter(p => p.username?.toLowerCase().includes(searchUsername.toLowerCase()));
+    }
 
-  if (searchTitle.trim()) {
-    result = result.filter(p => p.title?.toLowerCase().includes(searchTitle.toLowerCase()));
-  }
+    if (searchTitle.trim()) {
+      result = result.filter(p => p.title?.toLowerCase().includes(searchTitle.toLowerCase()));
+    }
 
-  setfilteredPosts(result);
-}, [searchUsername, searchTitle, posts, showMyPosts]);
+    setfilteredPosts(result);
+  }, [searchUsername, searchTitle, posts, showMyPosts]);
  
   return (
     <div className="posts-page">
       <div className="page-header">
-        <button className="btn-home" onClick={() => navigate('/home')}>🏠 Home</button>
+        <button className="btn-home" onClick={() => navigate('/Home')}>🏠 Home</button>
         <h2>📝 My Travel Journal</h2>
       </div>
  
@@ -281,4 +282,3 @@ useEffect(() => {
     </div>
   );
 }
- 

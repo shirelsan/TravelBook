@@ -11,7 +11,8 @@ import {
 import '../styles/Albums.css';
 
 function AlbumList() {
-  const { userId } = useParams();
+  const { user } = useAuth();
+  const userId = user?.id; // משיכת מזהה המשתמש מהקונטקסט
   const navigate = useNavigate();
   const toast = useToast();
 
@@ -24,11 +25,10 @@ function AlbumList() {
   const [newAlbumTitle, setNewAlbumTitle] = useState('');
   const [confirmDelete, setConfirmDelete] = useState(null);
 
-  // סטייט לעריכת שם אלבום
   const [editAlbumId, setEditAlbumId] = useState(null);
   const [editAlbumTitle, setEditAlbumTitle] = useState('');
 
-  useEffect(() => { fetchAlbums(); }, [userId]);
+  useEffect(() => { if (userId) fetchAlbums(); }, [userId]);
 
   const fetchAlbums = async () => {
     setLoading(true);
@@ -86,7 +86,7 @@ function AlbumList() {
     <div className="albums-page">
       <div className="page-header">
         <div className="header-left">
-          <button className="btn-home" onClick={() => navigate(`/users/${userId}`)}>🏠 Home</button>
+          <button className="btn-home" onClick={() => navigate('/Home')}>🏠 Home</button>
           <h2>📷 My Destinations</h2>
         </div>
         <button className="btn-add-main" onClick={() => setShowAddForm(!showAddForm)}>
@@ -118,7 +118,7 @@ function AlbumList() {
         <div className="albums-grid">
           {filtered.map((album) => (
             <div key={album.id} className="album-card">
-              <div className="album-click-area" onClick={() => navigate(`/users/${userId}/albums/${album.id}/photos`)}>
+              <div className="album-click-area" onClick={() => navigate(`/albums/${album.id}/photos`)}>
                 {covers[album.id] ? <img className="album-cover-img" src={covers[album.id]} alt="" /> : <div className="album-cover-placeholder">🗺️</div>}
               </div>
               <div className="album-info">
@@ -135,7 +135,7 @@ function AlbumList() {
                   </div>
                 ) : (
                   <>
-                    <span className="album-title" onClick={() => navigate(`/users/${userId}/albums/${album.id}/photos`)}>{album.title}</span>
+                    <span className="album-title" onClick={() => navigate(`/albums/${album.id}/photos`)}>{album.title}</span>
                     <div className="album-meta-row">
                       <span className="album-id">#{String(album.id).substring(0,4)}</span>
                       <div className="album-actions">
@@ -168,7 +168,9 @@ function AlbumList() {
 }
 
 function AlbumPhotos() {
-  const { userId, albumId } = useParams();
+  const { albumId } = useParams();
+  const { user } = useAuth();
+  const userId = user?.id;
   const navigate = useNavigate();
   const toast = useToast();
   const fileInputRef = useRef(null);
@@ -184,9 +186,15 @@ function AlbumPhotos() {
   const [editPhotoTitle, setEditPhotoTitle] = useState('');
   const [albumTitle, setAlbumTitle] = useState('');
 
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const LIMIT = 6; 
+
   useEffect(() => { 
-    loadPhotos(1, true); 
-    loadAlbumTitle(); 
+    if (userId) {
+      loadPhotos(1, true); 
+      loadAlbumTitle(); 
+    }
   }, [albumId, userId]);
 
   const loadAlbumTitle = async () => {
@@ -203,14 +211,25 @@ function AlbumPhotos() {
   const loadPhotos = async (pageNum, reset = false) => {
     setLoading(true);
     try {
-      const res = await getPhotosByAlbum(albumId, pageNum, 12);
-      const fetched = Array.isArray(res) ? res : (Array.isArray(res?.data) ? res.data : []);
-      setPhotos((prev) => reset ? fetched : [...prev, ...fetched]);
+      const res = await getPhotosByAlbum(albumId, pageNum, LIMIT);
+      const fetchedData = Array.isArray(res) ? res : (res?.data || []);
+      
+      setPhotos((prev) => reset ? fetchedData : [...prev, ...fetchedData]);
+      
+      if (res.next !== undefined) {
+        setHasMore(res.next !== null);
+      } else {
+        setHasMore(fetchedData.length === LIMIT);
+      }
+      
+      setPage(pageNum);
+    } catch (err) {
+      toast('Failed to load photos', 'error');
     } finally {
       setLoading(false);
     }
   };
-
+  
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -264,7 +283,7 @@ function AlbumPhotos() {
     <div className="photos-page">
       <div className="photos-header">
         <div className="header-left">
-          <button className="btn-back" onClick={() => navigate(`/users/${userId}/albums`)}>← Back</button>
+          <button className="btn-back" onClick={() => navigate('/albums')}>← Back</button>
           <h2>{albumTitle ? `Album ${albumTitle}` : `Album #${String(albumId).substring(0,4)}`}</h2>
         </div>
         <button className="btn-add-main" onClick={() => setShowAddForm(!showAddForm)}>
@@ -311,6 +330,15 @@ function AlbumPhotos() {
           </div>
         ))}
       </div>
+
+      {hasMore && !loading && (
+        <div className="load-more" style={{ textAlign: 'center', margin: '35px 0' }}>
+          <button className="btn-secondary" onClick={() => loadPhotos(page + 1)}>
+            ⬇️ View More Memories
+          </button>
+        </div>
+      )}
+      {loading && photos.length > 0 && <Spinner text="Fetching more memories..." />}
 
       {lightbox && (
         <div className="lightbox-overlay" onClick={() => setLightbox(null)}>

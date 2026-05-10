@@ -1,5 +1,5 @@
-import { BrowserRouter, Routes, Route, Navigate, useNavigate, useParams } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import { ToastProvider } from './components/Toast';
 import ProtectedRoute from './components/ProtectedRoute';
 import Login from './pages/Login';
@@ -20,19 +20,18 @@ export default function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           
-          {/* הניתוב שונה כדי לכלול את מזהה המשתמש לפי הדרישות */}
+          {/* הניתוב שונה ושותח לפי הדרישה: הכתובת תהיה בדיוק /Home */}
           <Route
-            path="/users/:userId"
             element={
               <ProtectedRoute>
                 <Home />
               </ProtectedRoute>
             }
           >
-            <Route index element={<WelcomeDashboard />} />
-            <Route path="todos" element={<Todos />} />
-            <Route path="posts" element={<Posts />} />
-            <Route path="albums/*" element={<Albums />} />
+            <Route path="/Home" element={<WelcomeDashboard />} />
+            <Route path="/todos" element={<Todos />} />
+            <Route path="/posts" element={<Posts />} />
+            <Route path="/albums/*" element={<Albums />} />
           </Route>
           
           <Route path="*" element={<Navigate to="/login" replace />} />
@@ -45,7 +44,7 @@ export default function App() {
  
 function WelcomeDashboard() {
   const navigate = useNavigate();
-  const { userId } = useParams(); // מושכים את ה-ID מה-URL
+  const { user } = useAuth(); // משיכת המשתמש המחובר ישירות מהקונטקסט במקום מה-URL
   
   return (
     <div className="welcome-dashboard">
@@ -53,17 +52,17 @@ function WelcomeDashboard() {
       <h2>Welcome to TravelBook</h2>
       <p>Your personal travel journal. Choose a section from the sidebar to get started.</p>
       <div className="welcome-cards">
-        <div className="welcome-card" onClick={() => navigate(`/users/${userId}/todos`)}>
+        <div className="welcome-card" onClick={() => navigate('/todos')}>
           <span>☑️</span>
           <strong>Todos</strong>
           <p>Manage your travel tasks</p>
         </div>
-        <div className="welcome-card" onClick={() => navigate(`/users/${userId}/posts`)}>
+        <div className="welcome-card" onClick={() => navigate('/posts')}>
           <span>📝</span>
           <strong>Posts</strong>
           <p>Write your travel journal</p>
         </div>
-        <div className="welcome-card" onClick={() => navigate(`/users/${userId}/albums`)}>
+        <div className="welcome-card" onClick={() => navigate('/albums')}>
           <span>📷</span>
           <strong>Albums</strong>
           <p>Browse your travel photos</p>

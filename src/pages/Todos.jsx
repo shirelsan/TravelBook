@@ -23,7 +23,6 @@ export default function Todos() {
   const [searchCompleted, setSearchCompleted] = useState('all');
   const [confirmDelete, setConfirmDelete] = useState(null);
   
-  // State עבור העיצוב החדש של כרטיסיית ההוספה
   const [isAdding, setIsAdding] = useState(false);
 
   useEffect(() => { fetchTodos(); }, [user]);
@@ -58,7 +57,6 @@ export default function Todos() {
   };
 
   const handleDelete = async (id) => {
-    // שלחנו גם את מזהה המשתמש כדי שהקאש יתנקה נכון ב-api.js
     await deleteTodo(id, user.id);
     setTodos((prev) => prev.filter((t) => t.id !== id));
     setConfirmDelete(null);
@@ -89,7 +87,6 @@ export default function Todos() {
       return true;
     })
     .sort((a, b) => {
-      // התיקון הקריטי: שימוש ב-localeCompare מונע שגיאות NaN של מחרוזות מול מספרים!
       if (sortBy === 'id') return String(a.id).localeCompare(String(b.id));
       if (sortBy === 'title') return a.title.localeCompare(b.title);
       if (sortBy === 'completed') return Number(b.completed) - Number(a.completed);
@@ -99,8 +96,7 @@ export default function Todos() {
   return (
     <div className="todos-page">
       <div className="page-header">
-        {/* הניווט תוקן לכלול את מזהה המשתמש לפי הדרישות */}
-        <button className="btn-home" onClick={() => navigate(`/users/${user.id}`)}>🏠 Home</button>
+        <button className="btn-home" onClick={() => navigate('/Home')}>🏠 Home</button>
         <h2>☑️ My Travel Tasks</h2>
       </div>
 
@@ -132,8 +128,6 @@ export default function Todos() {
         <Spinner text="Loading your tasks..." />
       ) : (
         <ul className="todo-list">
-          
-          {/* עיצוב חדש ואינטואיטיבי להוספת משימה (Inline Add) */}
           <li className="todo-item" style={{ cursor: 'pointer', border: isAdding ? '1px solid #1a6b8a' : '1px dashed #9e9080' }} onClick={() => !isAdding && setIsAdding(true)}>
             {isAdding ? (
               <div className="todo-edit-row" onClick={(e) => e.stopPropagation()}>
