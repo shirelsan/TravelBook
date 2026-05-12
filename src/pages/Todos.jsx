@@ -80,7 +80,7 @@ export default function Todos() {
 
   const filtered = todos
     .filter((t) => {
-      if (searchId && String(t.id) !== searchId) return false;
+      if (searchId && !String(t.id).includes(searchId)) return false;
       if (searchTitle && !t.title.toLowerCase().includes(searchTitle.toLowerCase())) return false;
       if (searchCompleted === 'done' && !t.completed) return false;
       if (searchCompleted === 'pending' && t.completed) return false;

@@ -191,6 +191,7 @@ export const updateComment = (id, data) => apiFetch(`/comments/${id}`, { method:
 export const deleteComment = (id) => apiFetch(`/comments/${id}`, { method: 'DELETE' });
 
 // --- ALBUMS ---
+
 export const getAlbumsByUser = async (userId) => {
   if (cache.albums[userId]) return cache.albums[userId];
   const data = await apiFetch(`/albums?userId=${userId}`);
