@@ -40,7 +40,9 @@ export default function Home() {
           <NavLink to="/posts" className={({ isActive }) => `nav-btn ${isActive ? 'active' : ''}`}>
             <span>📝</span> Posts
           </NavLink>
-          <NavLink to="/albums" className={({ isActive }) => `nav-btn ${isActive ? 'active' : ''}`}>
+          
+          {/* הניווט הותאם בדיוק למבנה הנדרש הכולל את מזהה המשתמש */}
+          <NavLink to={`/users/${user.id}/albums`} className={({ isActive }) => `nav-btn ${isActive ? 'active' : ''}`}>
             <span>📷</span> Albums
           </NavLink>
         </nav>

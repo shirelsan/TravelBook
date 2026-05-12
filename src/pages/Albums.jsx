@@ -12,7 +12,7 @@ import '../styles/Albums.css';
 
 function AlbumList() {
   const { user } = useAuth();
-  const userId = user?.id; // משיכת מזהה המשתמש מהקונטקסט
+  const userId = user?.id; 
   const navigate = useNavigate();
   const toast = useToast();
 
@@ -118,7 +118,8 @@ function AlbumList() {
         <div className="albums-grid">
           {filtered.map((album) => (
             <div key={album.id} className="album-card">
-              <div className="album-click-area" onClick={() => navigate(`/albums/${album.id}/photos`)}>
+              {/* ניווט מדויק המכיל את שני המזהים בכתובת */}
+              <div className="album-click-area" onClick={() => navigate(`/users/${userId}/albums/${album.id}/photos`)}>
                 {covers[album.id] ? <img className="album-cover-img" src={covers[album.id]} alt="" /> : <div className="album-cover-placeholder">🗺️</div>}
               </div>
               <div className="album-info">
@@ -135,9 +136,9 @@ function AlbumList() {
                   </div>
                 ) : (
                   <>
-                    <span className="album-title" onClick={() => navigate(`/albums/${album.id}/photos`)}>{album.title}</span>
+                    <span className="album-title" onClick={() => navigate(`/users/${userId}/albums/${album.id}/photos`)}>{album.title}</span>
                     <div className="album-meta-row">
-                      <span className="album-id">#{String(album.id).substring(0,4)}</span>
+                      <span className="album-id">#{String(album.id)}</span>
                       <div className="album-actions">
                         <button className="btn-mini-action" onClick={() => { setEditAlbumId(album.id); setEditAlbumTitle(album.title); }}>✏️</button>
                         <button className="btn-mini-action" onClick={() => setConfirmDelete(album.id)}>🗑️</button>
@@ -168,9 +169,7 @@ function AlbumList() {
 }
 
 function AlbumPhotos() {
-  const { albumId } = useParams();
-  const { user } = useAuth();
-  const userId = user?.id;
+  const { userId, albumId } = useParams(); // קריאת שני המזהים מהכתובת
   const navigate = useNavigate();
   const toast = useToast();
   const fileInputRef = useRef(null);
@@ -191,7 +190,7 @@ function AlbumPhotos() {
   const LIMIT = 6; 
 
   useEffect(() => { 
-    if (userId) {
+    if (userId && albumId) {
       loadPhotos(1, true); 
       loadAlbumTitle(); 
     }
@@ -259,7 +258,7 @@ function AlbumPhotos() {
     if (!newPhotoUrl) { toast('Please choose an image', 'error'); return; }
     try {
       const added = await createPhoto({ 
-        albumId: albumId, 
+        albumId: Number(albumId) || albumId, 
         title: newPhotoTitle.trim() || 'Untitled Memory', 
         url: newPhotoUrl, 
         thumbnailUrl: newPhotoUrl 
@@ -283,8 +282,8 @@ function AlbumPhotos() {
     <div className="photos-page">
       <div className="photos-header">
         <div className="header-left">
-          <button className="btn-back" onClick={() => navigate('/albums')}>← Back</button>
-          <h2>{albumTitle ? `Album ${albumTitle}` : `Album #${String(albumId).substring(0,4)}`}</h2>
+          <button className="btn-back" onClick={() => navigate(`/users/${userId}/albums`)}>← Back</button>
+          <h2>{albumTitle ? `Album ${albumTitle}` : `Album #${String(albumId)}`}</h2>
         </div>
         <button className="btn-add-main" onClick={() => setShowAddForm(!showAddForm)}>
           {showAddForm ? '✕ Close' : '📸 Add Memory'}

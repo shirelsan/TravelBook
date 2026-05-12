@@ -20,18 +20,13 @@ export default function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           
-          {/* הניתוב שונה ושותח לפי הדרישה: הכתובת תהיה בדיוק /Home */}
-          <Route
-            element={
-              <ProtectedRoute>
-                <Home />
-              </ProtectedRoute>
-            }
-          >
+          <Route element={<ProtectedRoute><Home /></ProtectedRoute>}>
             <Route path="/Home" element={<WelcomeDashboard />} />
             <Route path="/todos" element={<Todos />} />
             <Route path="/posts" element={<Posts />} />
-            <Route path="/albums/*" element={<Albums />} />
+            
+            {/* דרישת המטלה: הכתובת תכיל את מזהה המשתמש ומזהה האלבום */}
+            <Route path="/users/:userId/albums/*" element={<Albums />} />
           </Route>
           
           <Route path="*" element={<Navigate to="/login" replace />} />
@@ -44,7 +39,7 @@ export default function App() {
  
 function WelcomeDashboard() {
   const navigate = useNavigate();
-  const { user } = useAuth(); // משיכת המשתמש המחובר ישירות מהקונטקסט במקום מה-URL
+  const { user } = useAuth(); 
   
   return (
     <div className="welcome-dashboard">
@@ -62,7 +57,7 @@ function WelcomeDashboard() {
           <strong>Posts</strong>
           <p>Write your travel journal</p>
         </div>
-        <div className="welcome-card" onClick={() => navigate('/albums')}>
+        <div className="welcome-card" onClick={() => navigate(`/users/${user?.id}/albums`)}>
           <span>📷</span>
           <strong>Albums</strong>
           <p>Browse your travel photos</p>
