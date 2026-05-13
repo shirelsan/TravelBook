@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useNavigate, useParams, Routes, Route } from 'react-router-dom';
+import { useNavigate, useParams, Routes, Route, useSearchParams  } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../components/Toast';
 import ConfirmDialog from '../components/ConfirmDialog';
@@ -9,6 +9,7 @@ import {
   getPhotosByAlbum, createPhoto, updatePhoto, deletePhoto
 } from '../services/api';
 import '../styles/Albums.css';
+
 
 function AlbumList() {
   const { user } = useAuth();
@@ -180,6 +181,7 @@ function AlbumPhotos() {
   const [newPhotoTitle, setNewPhotoTitle] = useState('');
   const [newPhotoUrl, setNewPhotoUrl] = useState('');
   const [lightbox, setLightbox] = useState(null);
+  const [searchParams, setSearchParams] = useSearchParams();
   const [confirmDelete, setConfirmDelete] = useState(null);
   const [editPhotoId, setEditPhotoId] = useState(null);
   const [editPhotoTitle, setEditPhotoTitle] = useState('');
@@ -308,7 +310,7 @@ function AlbumPhotos() {
       <div className="photos-grid">
         {photos.map((photo) => (
           <div key={photo.id} className="photo-card-polaroid">
-            <div className="polaroid-img-wrap" onClick={() => setLightbox(photo)}>
+            <div className="polaroid-img-wrap" onClick={() => { setLightbox(photo); setSearchParams({ photoId: photo.id }); }}>
               <img src={photo.url} alt="" />
             </div>
             {editPhotoId === photo.id ? (
@@ -319,6 +321,7 @@ function AlbumPhotos() {
               </div>
             ) : (
               <div className="polaroid-caption">
+                <span className="caption-id" style={{ fontSize: '11px', color: '#9e9080' }}>#{String(photo.id).substring(0, 4)}</span>
                 <span className="caption-text">{photo.title}</span>
                 <div className="caption-actions">
                   <button className="btn-mini-action" onClick={() => { setEditPhotoId(photo.id); setEditPhotoTitle(photo.title); }}>✏️</button>
@@ -340,9 +343,9 @@ function AlbumPhotos() {
       {loading && photos.length > 0 && <Spinner text="Fetching more memories..." />}
 
       {lightbox && (
-        <div className="lightbox-overlay" onClick={() => setLightbox(null)}>
+        <div className="lightbox-overlay" onClick={() => { setLightbox(null); setSearchParams({}); }}>
           <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
-            <button className="lightbox-close" onClick={() => setLightbox(null)}>✕</button>
+            <button className="lightbox-close" onClick={() => { setLightbox(null); setSearchParams({}); }}>✕</button>
             <img src={lightbox.url} alt="" />
             <p className="lightbox-title">{lightbox.title}</p>
           </div>

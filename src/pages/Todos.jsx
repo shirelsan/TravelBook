@@ -64,14 +64,14 @@ export default function Todos() {
   };
 
   const handleToggle = async (todo) => {
-    const updated = await updateTodo(todo.id, { ...todo, completed: !todo.completed });
+    const updated = await updateTodo(todo.id, { completed: !todo.completed });
     setTodos((prev) => prev.map((t) => (t.id === todo.id ? updated : t)));
     toast(updated.completed ? 'Marked as done!' : 'Marked as pending');
   };
 
   const handleEditSave = async (todo) => {
     if (!editTitle.trim()) return;
-    const updated = await updateTodo(todo.id, { ...todo, title: editTitle.trim() });
+    const updated = await updateTodo(todo.id, { title: editTitle.trim() });
     setTodos((prev) => prev.map((t) => (t.id === todo.id ? updated : t)));
     setEditId(null);
     setEditTitle('');

@@ -45,6 +45,7 @@ export default function Posts() {
  
   const [confirmDeletePost, setConfirmDeletePost] = useState(null);
   const [confirmDeleteComment, setConfirmDeleteComment] = useState(null);
+  
  
   // טעינה ראשונית של הפוסטים
   useEffect(() => { fetchPosts(); }, [user]);
@@ -248,7 +249,7 @@ export default function Posts() {
                 <input value={editPostTitle} onChange={(e) => setEditPostTitle(e.target.value)} />
                 <textarea value={editPostBody} onChange={(e) => setEditPostBody(e.target.value)} rows={5} />
                 <div className="edit-actions">
-                  <button className="btn-primary" onClick={handleEditSave}>Save</button>
+                  <button className="btn-primary" onClick={handleEditPostSave}>Save</button>
                   <button onClick={() => setEditPostId(null)}>Cancel</button>
                 </div>
               </div>

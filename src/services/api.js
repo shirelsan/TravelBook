@@ -93,11 +93,16 @@ export const createTodo = async (data) => {
   return newTodo;
 };
 
+//export const updateTodo = async (id, data) => {
+//  const updated = await apiFetch(`/todos/${id}`, { method: 'PUT', body: JSON.stringify(data) });
+//  if (cache.todos[data.userId]) {
+//    cache.todos[data.userId] = cache.todos[data.userId].map(t => t.id === id ? updated : t);
+//  }
+//  return updated;
+//};
+
 export const updateTodo = async (id, data) => {
-  const updated = await apiFetch(`/todos/${id}`, { method: 'PUT', body: JSON.stringify(data) });
-  if (cache.todos[data.userId]) {
-    cache.todos[data.userId] = cache.todos[data.userId].map(t => t.id === id ? updated : t);
-  }
+  const updated = await apiFetch(`/todos/${id}`, { method: 'PATCH', body: JSON.stringify(data) });
   return updated;
 };
 
