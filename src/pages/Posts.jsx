@@ -15,10 +15,12 @@ export default function Posts() {
   const navigate = useNavigate();
   const toast = useToast();
   
-  // סנכרון מזהה הפוסט הפתוח מול שורת הכתובות (חלק ז' - עמידות בריענון עמוד)
+  // סנכרון מזהה הפוסט הפתוח מול שורת הכתובות
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const [showMyPosts, setShowMyPosts] = useState(false);
+  // ברירת המחדל היא true כדי להציג מיד רק את הפוסטים של המשתמש
+  const [showMyPosts, setShowMyPosts] = useState(true);
+  
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedPost, setSelectedPost] = useState(null);
@@ -26,7 +28,6 @@ export default function Posts() {
   const [showComments, setShowComments] = useState(false);
   const [loadingComments, setLoadingComments] = useState(false);
  
-  // שדות החיפוש - הורחב לכלול חיפוש לפי ID כנדרש במטלה
   const [searchId, setSearchId] = useState('');
   const [searchUsername, setSearchUsername] = useState('');
   const [searchTitle, setSearchTitle] = useState('');
@@ -46,21 +47,28 @@ export default function Posts() {
   const [confirmDeletePost, setConfirmDeletePost] = useState(null);
   const [confirmDeleteComment, setConfirmDeleteComment] = useState(null);
   
+  // --- תוספת חדשה: סטייט לניהול כמות הפוסטים המוצגת (טעינה בשלבים) ---
+  const [visibleCount, setVisibleCount] = useState(10);
  
-  // טעינה ראשונית של הפוסטים
-  useEffect(() => { fetchPosts(); }, [user]);
+  // טעינה ראשונית - שימוש ב-ID בלבד למניעת בקשות כפולות
+  useEffect(() => { 
+    if (user?.id) {
+      fetchPosts(); 
+    }
+  }, [user?.id]);
  
   const fetchPosts = async () => {
     setLoading(true);
     try {
       const data = await getAllPosts();
-      setPosts(data);
+      // הופכים את המערך כדי שהפוסטים האחרונים (החדשים ביותר) יופיעו ראשונים בפיד
+      setPosts([...data].reverse());
     } finally {
       setLoading(false);
     }
   };
 
-  // פתיחה אוטומטית של פוסט אם המזהה שלו קיים ב-URL (לאחר ריענון עמוד)
+  // פתיחה אוטומטית של פוסט מתוך ה-URL
   useEffect(() => {
     const urlPostId = searchParams.get('postId');
     if (posts.length > 0 && urlPostId) {
@@ -75,7 +83,8 @@ export default function Posts() {
     e.preventDefault();
     if (!newPostTitle.trim() || !newPostBody.trim()) return;
     const added = await createPost({ userId: user.id, title: newPostTitle.trim(), body: newPostBody.trim() });
-    setPosts([...posts, added]);
+    // מוסיפים את הפוסט החדש לראש הרשימה כדי שיופיע מיד למעלה
+    setPosts([added, ...posts]);
     setNewPostTitle(''); setNewPostBody(''); setShowAddPost(false);
     toast('Post published!');
   };
@@ -86,7 +95,7 @@ export default function Posts() {
     if (selectedPost?.id === id) { 
       setSelectedPost(null); 
       setShowComments(false); 
-      setSearchParams({}); // ניקוי ה-URL
+      setSearchParams({}); 
     }
     setConfirmDeletePost(null);
     toast('Post deleted', 'error');
@@ -104,7 +113,6 @@ export default function Posts() {
     toast('Post updated');
   };
  
-  // בחירת פוסט מעדכנת את הסטייט וגם את שורת הכתובות ללא ריענון
   const handleSelectPost = (post) => {
     setSelectedPost(post); 
     setShowComments(false); 
@@ -152,16 +160,16 @@ export default function Posts() {
     toast('Comment updated');
   };
  
-  const isMyComment = (comment) => comment.email === user.email;
+  const isMyComment = (comment) => comment.email === user?.email;
  
   const [filteredPosts, setfilteredPosts] = useState([]);
 
-  // סינון הפוסטים כולל כעת בדיקת ID, כותרת ושם משתמש
+  // סינון הפוסטים
   useEffect(() => {
     let result = posts;
 
     if (showMyPosts) {
-      result = result.filter(p => String(p.userId) === String(user.id));
+      result = result.filter(p => String(p.userId) === String(user?.id));
     }
 
     if (searchId.trim()) {
@@ -177,18 +185,20 @@ export default function Posts() {
     }
 
     setfilteredPosts(result);
-  }, [searchId, searchUsername, searchTitle, posts, showMyPosts, user]);
+  }, [searchId, searchUsername, searchTitle, posts, showMyPosts, user?.id]);
  
+  // --- חיתוך הפוסטים להצגה בפועל לפי הסטייט של visibleCount ---
+  const displayedPosts = filteredPosts.slice(0, visibleCount);
+  const hasMore = visibleCount < filteredPosts.length;
+
   return (
     <div className="posts-page">
       <div className="page-header">
-        {/* תוקן לניווט המדויק עם H גדולה */}
         <button className="btn-home" onClick={() => navigate('/Home')}>🏠 Home</button>
         <h2>📝 My Travel Journal</h2>
       </div>
  
       <div className="posts-search">
-        {/* הוספת שדה חיפוש לפי ID בהתאם לדרישת המטלה */}
         <input placeholder="Search by ID" value={searchId} onChange={(e) => setSearchId(e.target.value)} style={{ width: '130px' }} />
         <input placeholder="Search by username" value={searchUsername} onChange={(e) => setSearchUsername(e.target.value)} />
         <input placeholder="Search by title" value={searchTitle} onChange={(e) => setSearchTitle(e.target.value)} />
@@ -216,30 +226,43 @@ export default function Posts() {
               <span>📝</span>
               <p>{posts.length === 0 ? 'No posts yet. Write your first travel story!' : 'No posts match your search.'}</p>
             </div>
-          ) : filteredPosts.map((post) => (
-            <div key={post.id} className={`post-item ${selectedPost?.id === post.id ? 'selected' : ''}`}>
-              <div className="post-item-header" onClick={() => handleSelectPost(post)}>
-                {/* דרישת חובה: תצוגת המזהה הייחודי (ID) והכותרת במצב סקירה */}
-                <span className="post-id" style={{ fontWeight: 'bold', color: '#9e9080', marginRight: '6px' }}>
-                  #{String(post.id).substring(0, 4)}
-                </span>
-                <span className="post-author" style={{ color: '#1a6b8a', marginRight: '8px' }}>
-                  @{post.username}
-                </span>
-                <span className="post-item-title">{post.title}</span>
-              </div>
-              
-              <div className="post-item-actions">
-                <button onClick={() => handleSelectPost(post)}>👁️</button>
-                {String(post.userId) === String(user.id) && (
-                  <>
-                    <button onClick={() => { setEditPostId(post.id); setEditPostTitle(post.title); setEditPostBody(post.body); handleSelectPost(post); }}>✏️</button>
-                    <button onClick={() => setConfirmDeletePost(post.id)}>🗑️</button>
-                  </>
-                )}
-              </div>
-            </div>
-          ))}
+          ) : (
+            <>
+              {/* רינדור הפוסטים הגזורים בלבד */}
+              {displayedPosts.map((post) => (
+                <div key={post.id} className={`post-item ${selectedPost?.id === post.id ? 'selected' : ''}`}>
+                  <div className="post-item-header" onClick={() => handleSelectPost(post)}>
+                    <span className="post-id" style={{ fontWeight: 'bold', color: '#9e9080', marginRight: '6px' }}>
+                      #{String(post.id).substring(0, 4)}
+                    </span>
+                    <span className="post-author" style={{ color: '#1a6b8a', marginRight: '8px' }}>
+                      @{post.username}
+                    </span>
+                    <span className="post-item-title">{post.title}</span>
+                  </div>
+                  
+                  <div className="post-item-actions">
+                    <button onClick={() => handleSelectPost(post)}>👁️</button>
+                    {String(post.userId) === String(user?.id) && (
+                      <>
+                        <button onClick={() => { setEditPostId(post.id); setEditPostTitle(post.title); setEditPostBody(post.body); handleSelectPost(post); }}>✏️</button>
+                        <button onClick={() => setConfirmDeletePost(post.id)}>🗑️</button>
+                      </>
+                    )}
+                  </div>
+                </div>
+              ))}
+
+              {/* כפתור טעינת עוד פוסטים - מוצג רק אם נותרו פוסטים להציג */}
+              {hasMore && (
+                <div style={{ textAlign: 'center', marginTop: '10px' }}>
+                  <button className="btn-secondary" onClick={() => setVisibleCount(prev => prev + 10)}>
+                    ⬇️ Load More Posts
+                  </button>
+                </div>
+              )}
+            </>
+          )}
         </div>
  
         {selectedPost && (
